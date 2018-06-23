@@ -58,8 +58,12 @@ module Ala3.Entity {
                 let taskId = availTasks[i];
                 this.tasks[taskId].requested = true;
             }
-        }
 
+            // add poss-it with icons
+            let postit = new Phaser.Sprite(game, 10, -120, 'postit');
+            postit.angle = Phaser.Math.random(-20, 20);
+            this.addChild(postit);
+        }
 
         begin() {
             // animate from left to work area

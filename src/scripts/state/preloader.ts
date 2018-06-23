@@ -20,6 +20,13 @@ module Ala3.State {
             this.load.image('paper-inbox', 'assets/images/paper-inbox.png');
             this.load.image('tray-outer-inbox', 'assets/images/tray-outer-inbox.png');
             this.load.image('outbox', 'assets/images/outbox.png');
+            this.load.image('postit', 'assets/images/postit.png');
+
+            this.load.image('icon-paperclip', 'assets/images/icon-paperclip.png');
+            this.load.image('icon-pen', 'assets/images/icon-pen.png');
+            this.load.image('icon-shredder', 'assets/images/icon-shredder.png');
+            this.load.image('icon-stamp', 'assets/images/icon-stamp.png');
+            this.load.image('icon-staple', 'assets/images/icon-staple.png');
         }
 
         create() {
