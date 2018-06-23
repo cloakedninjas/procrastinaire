@@ -4,8 +4,11 @@ module Ala3.Entity {
         static TASK_PEN: number = 2;
         static TASK_SHRED: number = 3;
         static TASK_STAMP: number = 4;
+        static TASK_STAPLER: number = 5;
 
-        static MAX_TASKS: number = 3;
+        static TOTAL_TASKS: number = 5;
+        static MIN_TASKS_PER_WORK: number = 1;
+        static MAX_TASKS_PER_WORK: number = 6;
 
         game: Game;
         startDragPos: {
@@ -27,42 +30,69 @@ module Ala3.Entity {
             this.tasks = {};
 
             this.tasks[Paper.TASK_CLIP] = {
-                requested: false,
-                done: false
+                requested: 0,
+                done: 0
             };
 
             this.tasks[Paper.TASK_PEN] = {
-                requested: false,
-                done: false
+                requested: 0,
+                done: 0
             };
 
             this.tasks[Paper.TASK_SHRED] = {
-                requested: false,
-                done: false
+                requested: 0,
+                done: 0
             };
 
             this.tasks[Paper.TASK_STAMP] = {
-                requested: false,
-                done: false
+                requested: 0,
+                done: 0
             };
 
-            let taskCount = Math.floor(Phaser.Math.random(1, Paper.MAX_TASKS + 1));
-            let availTasks = Helpers.shuffle([
-                Paper.TASK_CLIP,
-                Paper.TASK_PEN,
-                Paper.TASK_SHRED,
-                Paper.TASK_STAMP
-            ]);
+            this.tasks[Paper.TASK_STAPLER] = {
+                requested: 0,
+                done: 0
+            };
+
+            let taskCount = Math.floor(Phaser.Math.random(Paper.MIN_TASKS_PER_WORK, Paper.MAX_TASKS_PER_WORK + 1));
 
             for (let i = 0; i < taskCount; i++) {
-                let taskId = availTasks[i];
-                this.tasks[taskId].requested = true;
+                let taskId = Math.floor(Phaser.Math.random(1, Paper.TOTAL_TASKS + 1));
+                this.tasks[taskId].requested++;
             }
 
-            // add poss-it with icons
+            // can't shred multiple times :D
+            if (this.tasks[Paper.TASK_SHRED].requested > 1) {
+                this.tasks[Paper.TASK_SHRED].requested = 1;
+            }
+
+            // add post-it
             let postit = new Phaser.Sprite(game, 10, -120, 'postit');
             postit.angle = Phaser.Math.random(-20, 20);
             this.addChild(postit);
+
+            // add icons
+            let i = 0;
+            let icons = {};
+            icons[Paper.TASK_CLIP] = 'icon-paperclip';
+            icons[Paper.TASK_PEN] = 'icon-pen';
+            icons[Paper.TASK_SHRED] = 'icon-shredder';
+            icons[Paper.TASK_STAMP] = 'icon-stamp';
+            icons[Paper.TASK_STAPLER] = 'icon-staple';
+
+            for (let taskId in this.tasks) {
+                let task = this.tasks[taskId];
+
+                if (task.requested > 0) {
+                    for (let j = 0; j < task.requested; j++) {
+                        let x = ((i % 2) * 46) + 20;
+                        let y = (Math.floor(i / 2) * 27) + 3;
+                        let stamp = new Phaser.Sprite(game, x, y, icons[taskId]);
+                        postit.addChild(stamp);
+                        i++;
+                    }
+                }
+            }
         }
 
         begin() {

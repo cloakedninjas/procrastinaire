@@ -79,7 +79,7 @@ module Ala3.State {
             }
 
             // queue another
-            // this.game.time.events.add(3000, this.shouldAddWork, this);
+            this.game.time.events.add(2000, this.shouldAddWork, this);
         }
 
         takeItemFromInbox() {
