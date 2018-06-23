@@ -1,5 +1,5 @@
 module Ala3.Entity {
-    export class Solitaire extends Phaser.Sprite {
+    export class Computer extends Phaser.Sprite {
         game: Game;
         deck: Phaser.Sprite[];
 

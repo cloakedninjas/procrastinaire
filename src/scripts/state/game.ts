@@ -34,8 +34,8 @@ module Ala3.State {
             this.add.existing(stamp);
             stamp.events.onInputDown.add(this.onToolClick, this);
 
-            let solitaire = new Entity.Solitaire(this.game, 548, -7);
-            this.add.existing(solitaire);
+            let computer = new Entity.Computer(this.game, 548, -7);
+            this.add.existing(computer);
 
             let shine = new Phaser.Sprite(this.game, 921, 74, 'computer-shine');
             this.add.existing(shine);
