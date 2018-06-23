@@ -41,15 +41,20 @@ module Ala3.Entity {
                 width: 0,
                 height: 0,
                 bounds: {
-                    x: 0,
-                    y: 0
+                    x1: 0,
+                    y1: 0,
+                    x2: 0,
+                    y2: 0,
                 }
             };
 
             this.tableauPos.width = this.holdingStacks.length * this.tableauPos.stackSpacing;
             this.tableauPos.height = cardSize.h + (this.tableauPos.vSpacing * 12);
-            this.tableauPos.bounds.x = this.tableauPos.x + this.tableauPos.width;
-            this.tableauPos.bounds.y = this.tableauPos.y + this.tableauPos.height;
+
+            this.tableauPos.bounds.x1 = this.x + this.tableauPos.x;
+            this.tableauPos.bounds.y1 = this.y + this.tableauPos.y;
+            this.tableauPos.bounds.x2 = this.x + this.tableauPos.x + this.tableauPos.width;
+            this.tableauPos.bounds.y2 = this.y + this.tableauPos.y + this.tableauPos.height;
 
             for (let i = 0; i < this.holdingStacks.length; i++) {
                 let stack = this.holdingStacks[i];
@@ -79,8 +84,8 @@ module Ala3.Entity {
 
             this.isOverStack = false;
 
-            if (pointer.x >= this.tableauPos.x && pointer.x <= this.tableauPos.bounds.x &&
-                pointer.y >= this.tableauPos.y && pointer.y <= this.tableauPos.bounds.y) {
+            if (pointer.x >= this.tableauPos.bounds.x1 && pointer.x <= this.tableauPos.bounds.x2 &&
+                pointer.y >= this.tableauPos.bounds.y1 && pointer.y <= this.tableauPos.bounds.y2) {
 
                 this.isOverStack = true;
             }
@@ -89,7 +94,7 @@ module Ala3.Entity {
         onHoldingCardDragEnd(card: Card, pointer) {
             if (this.isOverStack) {
                 // determine which stack to snap to
-                let i = Math.floor((pointer.x - this.tableauPos.x) / this.tableauPos.stackSpacing);
+                let i = Math.floor((pointer.x - this.tableauPos.bounds.x1) / this.tableauPos.stackSpacing);
 
                 if (card.stackIndex === i) {
                     card.returnToDragStartPos();
