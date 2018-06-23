@@ -40,7 +40,7 @@ module Ala3.State {
             let shine = new Phaser.Sprite(this.game, 921, 74, 'computer-shine');
             this.add.existing(shine);
 
-            this.cursorTool = new Phaser.Sprite(this.game, 0, 0, 'stapler-desk');
+            this.cursorTool = new Phaser.Sprite(this.game, 0, 0, 'poop');
             this.cursorTool.visible = false;
             this.add.existing(this.cursorTool);
 
@@ -120,7 +120,6 @@ module Ala3.State {
 
                 if (this.itemInProgress) {
                     this.itemInProgress.input.enableDrag();
-                    this.itemInProgress.bringToTop();
                 }
             } else {
                 // picked up tool
@@ -131,6 +130,7 @@ module Ala3.State {
 
                 if (this.itemInProgress) {
                     this.itemInProgress.input.disableDrag();
+                    this.itemInProgress.input.bringToTop = false; // fix for paper onDrag changing z-index
                 }
             }
         }
