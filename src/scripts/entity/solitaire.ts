@@ -10,7 +10,7 @@ module Ala3.Entity {
         isOverStack: boolean = false;
 
         constructor(game, x, y) {
-            super(game, x, y);
+            super(game, x, y, 'computer');
 
             this.completeStacks = [[], [], [], []];
             this.holdingStacks = [[], [], [], [], [], [], []];
@@ -34,10 +34,10 @@ module Ala3.Entity {
             };
 
             this.tableauPos = {
-                x: 10,
-                y: 170,
-                vSpacing: 20,
-                stackSpacing: cardSize.w + 10,
+                x: 61,
+                y: 158,
+                vSpacing: 14,
+                stackSpacing: cardSize.w + 6,
                 width: 0,
                 height: 0,
                 bounds: {

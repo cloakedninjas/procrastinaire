@@ -7,8 +7,11 @@ module Ala3.State {
 
             this.load.image('mockup', 'assets/images/mockup.png');
 
+            this.load.image('computer', 'assets/images/computer-screen.png');
             this.load.image('card-back', 'assets/images/card-back-tropical.png');
             this.load.image('card-front', 'assets/images/card-front.png');
+
+            this.load.image('stapler-desk', 'assets/images/stapler-desk.png');
         }
 
         create() {
