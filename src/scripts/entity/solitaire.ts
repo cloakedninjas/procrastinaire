@@ -28,13 +28,18 @@ module Ala3.Entity {
 
             // build the tableau
 
+            let cardSize = {
+                w: 52,
+                h: 71
+            };
+
             this.tableauPos = {
                 x: 300,
                 y: 500,
                 vSpacing: 20,
-                stackSpacing: 100,
+                stackSpacing: cardSize.w + 20,
                 width: 0,
-                height: 250,
+                height: 0,
                 bounds: {
                     x: 0,
                     y: 0
@@ -42,6 +47,7 @@ module Ala3.Entity {
             };
 
             this.tableauPos.width = this.holdingStacks.length * this.tableauPos.stackSpacing;
+            this.tableauPos.height = cardSize.h + (this.tableauPos.vSpacing * 12);
             this.tableauPos.bounds.x = this.tableauPos.x + this.tableauPos.width;
             this.tableauPos.bounds.y = this.tableauPos.y + this.tableauPos.height;
 

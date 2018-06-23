@@ -4,7 +4,8 @@ module Ala3.State {
 
         preload() {
             this.loadingBar = new Entity.PreloadBar(this.game);
-            this.load.image('card-back', 'assets/images/card-back.jpeg');
+            this.load.image('card-back', 'assets/images/card-back-tropical.png');
+            this.load.image('card-front', 'assets/images/card-front.png');
         }
 
         create() {

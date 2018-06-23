@@ -32,16 +32,9 @@ module Ala3.Entity {
             let height = this.height;
             let bmd = new Phaser.BitmapData(game, 'card', width, height);
 
-            bmd.fill(209, 211, 158);
+            bmd.draw('card-front');
 
-            let borderWidth = 2;
-            let borderColour = 'white';
-            bmd.line(0, 0, width, 0, borderColour, borderWidth);
-            bmd.line(width, 0, width, height, borderColour, borderWidth);
-            bmd.line(width, height, 0, height, borderColour, borderWidth);
-            bmd.line(0, height, 0, 0, borderColour, borderWidth);
-
-            let fontStyle = '24px Arial';
+            let fontStyle = '20px Arial';
             let label;
 
             switch (this.value) {
