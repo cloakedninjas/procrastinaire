@@ -8,6 +8,7 @@ module Ala3.State {
         trayOuterInbox: Phaser.Sprite;
         outbox: Phaser.Sprite;
         shredder: Entity.Shredder;
+        currentTool: Entity.Tool;
 
         create() {
             let bg = this.add.sprite(0, 0, 'bg');
@@ -33,7 +34,7 @@ module Ala3.State {
             this.add.existing(stamp);
             stamp.events.onInputDown.add(this.onToolClick, this);
 
-            let solitaire = new Entity.Solitaire(this.game, 548 ,-7);
+            let solitaire = new Entity.Solitaire(this.game, 548, -7);
             this.add.existing(solitaire);
 
             let shine = new Phaser.Sprite(this.game, 921, 74, 'computer-shine');
@@ -57,8 +58,8 @@ module Ala3.State {
 
         update() {
             if (this.cursorTool.visible) {
-                this.cursorTool.x = this.game.input.mousePointer.x;
-                this.cursorTool.y = this.game.input.mousePointer.y;
+                this.cursorTool.x = this.game.input.activePointer.x
+                this.cursorTool.y = this.game.input.activePointer.y;
             }
         }
 
@@ -82,7 +83,7 @@ module Ala3.State {
             }
 
             // queue another
-            this.game.time.events.add(2000, this.shouldAddWork, this);
+            this.game.time.events.add(5000, this.shouldAddWork, this);
         }
 
         takeItemFromInbox() {
@@ -98,38 +99,9 @@ module Ala3.State {
             this.itemInProgress.begin();
 
             this.itemInProgress.events.onDragStop.add(this.onPaperDragEnd, this);
-        }
+            this.itemInProgress.events.onInputDown.add(this.clickOnPaper, this);
 
-        onToolClick(tool:Entity.Tool) {
-            if (this.cursorTool.visible) {
-                tool.alpha = 1;
-                this.cursorTool.visible = false;
-
-                if (this.itemInProgress) {
-                    this.itemInProgress.inputEnabled = true;
-                    this.itemInProgress.bringToTop();
-                }
-            } else {
-                tool.alpha = 0.5;
-                this.cursorTool.visible = true;
-                this.cursorTool.bringToTop();
-
-                if (this.itemInProgress) {
-                    this.itemInProgress.inputEnabled = false;
-                }
-            }
-        }
-
-        onPaperDragEnd(paper: Entity.Paper, pointer: Phaser.Pointer) {
-            if (this.shredder.getBounds().contains(pointer.x, pointer.y)) {
-                this.itemInProgress.shredded();
-                this.checkWorkQuality();
-            } else if (this.outbox.getBounds().contains(pointer.x, pointer.y)) {
-                this.itemInProgress.toOutbox();
-                this.checkWorkQuality();
-            } else {
-                this.itemInProgress.returnToDragStartPos();
-            }
+            window['paper'] = this.itemInProgress;
         }
 
         checkWorkQuality() {
@@ -139,6 +111,45 @@ module Ala3.State {
 
             this.itemInProgress.destroy();
             this.itemInProgress = null;
+        }
+
+        onToolClick(tool: Entity.Tool) {
+            if (this.cursorTool.visible) {
+                tool.alpha = 1;
+                this.cursorTool.visible = false;
+
+                if (this.itemInProgress) {
+                    this.itemInProgress.input.enableDrag();
+                    this.itemInProgress.bringToTop();
+                }
+            } else {
+                // picked up tool
+                tool.alpha = 0.5;
+                this.currentTool = tool;
+                this.cursorTool.visible = true;
+                this.cursorTool.bringToTop();
+
+                if (this.itemInProgress) {
+                    this.itemInProgress.input.disableDrag();
+                }
+            }
+        }
+
+        onPaperDragEnd(paper: Entity.Paper, pointer: Phaser.Pointer) {
+            if (this.shredder.getBounds().contains(pointer.x, pointer.y)) {
+                this.itemInProgress.applyTool(Entity.Paper.TASK_SHRED);
+                this.checkWorkQuality();
+            } else if (this.outbox.getBounds().contains(pointer.x, pointer.y)) {
+                this.checkWorkQuality();
+            } else {
+                this.itemInProgress.returnToDragStartPos();
+            }
+        }
+
+        clickOnPaper(paper: Entity.Paper, pointer: Phaser.Pointer) {
+            if (this.cursorTool.visible) {
+                this.itemInProgress.applyTool(this.currentTool.id);
+            }
         }
     }
 }

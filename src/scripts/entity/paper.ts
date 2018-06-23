@@ -137,12 +137,12 @@ module Ala3.Entity {
             }, 1000, Phaser.Easing.Elastic.Out, true);
         }
 
-        shredded() {
-            // check if this was meant to happen
-        }
+        applyTool(toolId: number) {
+            let task = this.tasks[toolId];
 
-        toOutbox() {
-            // done calc score
+            if (task) {
+                task.done++;
+            }
         }
 
         calcScore() {
