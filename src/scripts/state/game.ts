@@ -40,7 +40,7 @@ module Ala3.State {
             let shine = new Phaser.Sprite(this.game, 921, 74, 'computer-shine');
             this.add.existing(shine);
 
-            this.cursorTool = new Phaser.Sprite(this.game, 0, 0, 'poop');
+            this.cursorTool = new Phaser.Sprite(this.game, 0, 0);
             this.cursorTool.visible = false;
             this.add.existing(this.cursorTool);
 
@@ -58,7 +58,7 @@ module Ala3.State {
 
         update() {
             if (this.cursorTool.visible) {
-                this.cursorTool.x = this.game.input.activePointer.x
+                this.cursorTool.x = this.game.input.activePointer.x;
                 this.cursorTool.y = this.game.input.activePointer.y;
             }
         }
@@ -123,9 +123,24 @@ module Ala3.State {
                 }
             } else {
                 // picked up tool
+
+                let icons = {};
+                icons[Entity.Paper.TASK_CLIP] = 'paperclip-active';
+                icons[Entity.Paper.TASK_PEN] = 'pen-active';
+                icons[Entity.Paper.TASK_STAMP] = 'stamp-active';
+                icons[Entity.Paper.TASK_STAPLER] = 'stapler-active';
+
                 tool.alpha = 0.5;
                 this.currentTool = tool;
+                this.cursorTool.loadTexture(icons[tool.id]);
                 this.cursorTool.visible = true;
+
+                if (tool.id === Entity.Paper.TASK_PEN) {
+                    this.cursorTool.anchor.y = 1;
+                } else {
+                    this.cursorTool.anchor.y = 0;
+                }
+
                 this.cursorTool.bringToTop();
 
                 if (this.itemInProgress) {
@@ -146,7 +161,7 @@ module Ala3.State {
             }
         }
 
-        clickOnPaper(paper: Entity.Paper, pointer: Phaser.Pointer) {
+        clickOnPaper() {
             if (this.cursorTool.visible) {
                 this.itemInProgress.applyTool(this.currentTool.id);
             }

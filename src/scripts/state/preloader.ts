@@ -28,6 +28,11 @@ module Ala3.State {
             this.load.image('icon-shredder', 'assets/images/icon-shredder.png');
             this.load.image('icon-stamp', 'assets/images/icon-stamp.png');
             this.load.image('icon-staple', 'assets/images/icon-staple.png');
+
+            this.load.image('paperclip-active', 'assets/images/paperclip-active.png');
+            this.load.image('pen-active', 'assets/images/pen-active.png');
+            this.load.image('stamp-active', 'assets/images/stamp-active.png');
+            this.load.image('stapler-active', 'assets/images/stapler-active.png');
         }
 
         create() {
