@@ -155,10 +155,10 @@ module Ala3.Entity {
             for (let taskId in this.tasks) {
                 let task = this.tasks[taskId];
 
-                if (task.requested && task.done) {
-                    correct++;
+                if (task.requested) {
+                    correct += Math.min(task.done, task.requested);
                 } else if (!task.requested && task.done) {
-                    correct--;
+                    correct -= task.done;
                 }
             }
 
