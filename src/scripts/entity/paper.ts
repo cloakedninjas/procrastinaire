@@ -24,25 +24,29 @@ module Ala3.Entity {
             this.anchor.x = 0.5;
             this.anchor.y = 0.5;
 
-            this.tasks = [{
-                task: Paper.TASK_CLIP,
-                requested: false,
-                done: false
-            }, {
-                task: Paper.TASK_PEN,
-                requested: false,
-                done: false
-            }, {
-                task: Paper.TASK_SHRED,
-                requested: false,
-                done: false
-            }, {
-                task: Paper.TASK_STAMP,
-                requested: false,
-                done: false
-            }];
+            this.tasks = {};
 
-            let tasks = Math.ceil(Phaser.Math.random(1, Paper.MAX_TASKS + 1));
+            this.tasks[Paper.TASK_CLIP] = {
+                requested: false,
+                done: false
+            };
+
+            this.tasks[Paper.TASK_PEN] = {
+                requested: false,
+                done: false
+            };
+
+            this.tasks[Paper.TASK_SHRED] = {
+                requested: false,
+                done: false
+            };
+
+            this.tasks[Paper.TASK_STAMP] = {
+                requested: false,
+                done: false
+            };
+
+            let taskCount = Math.floor(Phaser.Math.random(1, Paper.MAX_TASKS + 1));
             let availTasks = Helpers.shuffle([
                 Paper.TASK_CLIP,
                 Paper.TASK_PEN,
@@ -50,12 +54,10 @@ module Ala3.Entity {
                 Paper.TASK_STAMP
             ]);
 
-            for (let i = 0; i < availTasks; i++) {
-                let taskId = tasks[i];
+            for (let i = 0; i < taskCount; i++) {
+                let taskId = availTasks[i];
                 this.tasks[taskId].requested = true;
             }
-
-            console.log(this.tasks);
         }
 
 
@@ -116,10 +118,12 @@ module Ala3.Entity {
                 return -3;
             }
 
-            for (let task of this.tasks) {
+            for (let taskId in this.tasks) {
+                let task = this.tasks[taskId];
+
                 if (task.requested && task.done) {
                     correct++;
-                } else {
+                } else if (!task.requested && task.done) {
                     correct--;
                 }
             }
