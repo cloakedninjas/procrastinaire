@@ -33,8 +33,11 @@ module Ala3.State {
             this.add.existing(stamp);
             stamp.events.onInputDown.add(this.onToolClick, this);
 
-            let solitaire = new Entity.Solitaire(this.game, 548 ,13);
+            let solitaire = new Entity.Solitaire(this.game, 548 ,-7);
             this.add.existing(solitaire);
+
+            let shine = new Phaser.Sprite(this.game, 921, 74, 'computer-shine');
+            this.add.existing(shine);
 
             this.cursorTool = new Phaser.Sprite(this.game, 0, 0, 'stapler-desk');
             this.cursorTool.visible = false;

@@ -65,7 +65,7 @@ module Ala3.Entity {
 
             this.revealed = true;
             this.inputEnabled = true;
-            this.input.enableDrag(false, true);
+            this.input.enableDrag(false, false);
             this.events.onDragStart.add(function () {
                 this.startDragPos = {x: this.x, y: this.y};
 
