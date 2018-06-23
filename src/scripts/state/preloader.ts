@@ -4,12 +4,12 @@ module Ala3.State {
 
         preload() {
             this.loadingBar = new Entity.PreloadBar(this.game);
-            this.load.image('phaser-logo', 'assets/images/phaser-logo.png');
+            this.load.image('card-back', 'assets/images/card-back.jpeg');
         }
 
         create() {
             this.loadingBar.setFillPercent(100);
-            var tween = this.game.add.tween(this.loadingBar).to({alpha: 0}, 1000, Phaser.Easing.Linear.None, true);
+            let tween = this.game.add.tween(this.loadingBar).to({alpha: 0}, 1000, Phaser.Easing.Linear.None, true);
             tween.onComplete.add(this.startGame, this);
         }
 
