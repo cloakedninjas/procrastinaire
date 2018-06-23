@@ -88,7 +88,7 @@ module Ala3.Entity {
         }
 
         onHoldingCardDragStart(card: Card, pointer: Phaser.Pointer) {
-            // bring all cards to front
+            this.bringStackToTop(card);
         }
 
         onHoldingCardDragMove(card: Card, pointer: Phaser.Pointer) {
@@ -138,12 +138,15 @@ module Ala3.Entity {
             let stack = this.holdingStacks[stackIndex];
             let previousStack = this.holdingStacks[card.stackIndex];
             let newParent = stack[stack.length - 1];
+            let childCards = this.getChildCards(card);
 
             /*let x = this.tableauPos.x + (stackIndex * this.tableauPos.stackSpacing);
             let y = this.tableauPos.y + (stack.length * this.tableauPos.vSpacing);*/
 
-            previousStack.pop();
-            stack.push(card);
+            for (let i = 0; i < childCards.length; i++) {
+                previousStack.pop();
+                stack.push(childCards[i]);
+            }
 
             if (newParent) {
                 // window['card'] = card;
@@ -163,6 +166,34 @@ module Ala3.Entity {
             tween.onComplete.add(function () {
 
             }, this);*/
+        }
+
+        bringStackToTop(card: Card) {
+            let parent = card.parent;
+            let topChild:any = card;
+
+            while (parent !== this) {
+                topChild = parent;
+                parent = parent.parent;
+            }
+
+            let i = this.children.indexOf(topChild);
+            this.children.splice(i, 1);
+            this.children.push(topChild);
+        }
+
+        getChildCards(card: Card) {
+            let cards = [];
+            let firstChild:any = card;
+
+            cards.push(firstChild);
+
+            while (firstChild.children.length > 0) {
+                firstChild = firstChild.children[0];
+                cards.push(firstChild);
+            }
+
+            return cards;
         }
     }
 }

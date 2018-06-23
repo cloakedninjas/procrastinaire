@@ -69,12 +69,6 @@ module Ala3.Entity {
             this.input.enableDrag(false, false);
             this.events.onDragStart.add(function () {
                 this.startDragPos = {x: this.x, y: this.y};
-
-                // re-order z-index
-
-                /*let i = this.parent.children.indexOf(this);
-                this.parent.children.slice(i, 1);
-                this.parent.children.push(this);*/
             }, this);
         }
 
