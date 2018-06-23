@@ -34,10 +34,10 @@ module Ala3.Entity {
             };
 
             this.tableauPos = {
-                x: 300,
-                y: 500,
+                x: 10,
+                y: 170,
                 vSpacing: 20,
-                stackSpacing: cardSize.w + 20,
+                stackSpacing: cardSize.w + 10,
                 width: 0,
                 height: 0,
                 bounds: {

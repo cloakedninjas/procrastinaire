@@ -5,17 +5,22 @@ module Ala3 {
 
         constructor() {
             super({
-                width: window.innerWidth,
-                height: window.innerHeight,
+                width: 1024,
+                height: 768,
                 renderer: Phaser.AUTO
             });
 
             this.state.add('preloader', State.Preloader, true);
             this.state.add('game', State.Game);
         }
+
+        boot() {
+            super.boot();
+            this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        }
     }
 }
 
 // export Game to window
-var Game = Ala3.Game;
+let Game = Ala3.Game;
 

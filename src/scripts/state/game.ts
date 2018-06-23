@@ -5,7 +5,9 @@ module Ala3.State {
             img.anchor.x = 0.5;
             img.anchor.y = 0.5;*/
 
-            let solitaire = new Entity.Solitaire(this.game, 0 ,0);
+            this.add.sprite(0, 0, 'mockup');
+
+            let solitaire = new Entity.Solitaire(this.game, 664 ,72);
             this.add.existing(solitaire);
         }
     }
