@@ -1,13 +1,16 @@
 module Ala3.Entity {
     export class Computer extends Phaser.Sprite {
         game: Game;
-        deck: Phaser.Sprite[];
+        deck: Card[];
+        visibleDeck: Card[];
 
         completeStacks: Card[][];
         holdingStacks: Card[][];
 
         tableauPos: any;
-        isOverStack: boolean = false;
+        foundationPos: any;
+        isOverTableau: boolean = false;
+        isOverFoundation: boolean = false;
 
         constructor(game, x, y) {
             super(game, x, y, 'computer');
@@ -15,6 +18,7 @@ module Ala3.Entity {
             this.completeStacks = [[], [], [], []];
             this.holdingStacks = [[], [], [], [], [], [], []];
             this.deck = [];
+            this.visibleDeck = [];
 
             for (let i = 0; i < 52; i++) {
                 let card = new Card(game, i);
@@ -24,7 +28,7 @@ module Ala3.Entity {
 
             this.deck = Helpers.shuffle(this.deck);
 
-            // build the tableau
+            // build the tableau + foundation areas
 
             let cardSize = {
                 w: 52,
@@ -54,6 +58,30 @@ module Ala3.Entity {
             this.tableauPos.bounds.x2 = this.x + this.tableauPos.x + this.tableauPos.width;
             this.tableauPos.bounds.y2 = this.y + this.tableauPos.y + this.tableauPos.height;
 
+            this.foundationPos = {
+                x: 200,
+                y: 80,
+                stackSpacing: cardSize.w + 10,
+                width: 0,
+                height: 0,
+                bounds: {
+                    x1: 0,
+                    y1: 0,
+                    x2: 0,
+                    y2: 0,
+                }
+            };
+
+            this.foundationPos.width = this.completeStacks.length * this.foundationPos.stackSpacing;
+            this.foundationPos.height = cardSize.h;
+
+            this.foundationPos.bounds.x1 = this.x + this.foundationPos.x;
+            this.foundationPos.bounds.y1 = this.y + this.foundationPos.y;
+            this.foundationPos.bounds.x2 = this.x + this.foundationPos.x + this.foundationPos.width;
+            this.foundationPos.bounds.y2 = this.y + this.foundationPos.y + this.foundationPos.height;
+
+            // fill cards
+
             for (let i = 0; i < this.holdingStacks.length; i++) {
                 let stack = this.holdingStacks[i];
                 let card;
@@ -81,8 +109,16 @@ module Ala3.Entity {
                 }
 
                 card.reveal();
-                card.visible = true;
             }
+
+            for (let i = 0; i < this.deck.length; i++) {
+                let card = this.deck[i];
+                card.x = 60;
+                card.y = 85;
+                this.addChild(card);
+            }
+
+            this.cycleDeck();
 
             window['solitaire'] = this;
         }
@@ -94,17 +130,23 @@ module Ala3.Entity {
         onHoldingCardDragMove(card: Card, pointer: Phaser.Pointer) {
             // is cursor inside tableau?
 
-            this.isOverStack = false;
+            this.isOverTableau = false;
+            this.isOverFoundation = false;
 
             if (pointer.x >= this.tableauPos.bounds.x1 && pointer.x <= this.tableauPos.bounds.x2 &&
                 pointer.y >= this.tableauPos.bounds.y1 && pointer.y <= this.tableauPos.bounds.y2) {
 
-                this.isOverStack = true;
+                this.isOverTableau = true;
+            } else if (
+                pointer.x >= this.foundationPos.bounds.x1 && pointer.x <= this.foundationPos.bounds.x2 &&
+                pointer.y >= this.foundationPos.bounds.y1 && pointer.y <= this.foundationPos.bounds.y2) {
+
+                this.isOverFoundation = true;
             }
         }
 
         onHoldingCardDragEnd(card: Card, pointer) {
-            if (this.isOverStack) {
+            if (this.isOverTableau) {
                 // determine which stack to snap to
                 let i = Math.floor((pointer.x - this.tableauPos.bounds.x1) / this.tableauPos.stackSpacing);
 
@@ -126,6 +168,14 @@ module Ala3.Entity {
 
                 if (prevCard.value === card.value + 1 && card.colour !== prevCard.colour) {
                     this.moveCardToStack(card, i);
+                    return;
+                }
+            } else if (this.isOverFoundation) {
+                // can we drop here?
+                let childCards = this.getChildCards(card);
+
+                if (childCards.length !== 1) {
+                    card.returnToDragStartPos();
                     return;
                 }
             }
@@ -194,6 +244,18 @@ module Ala3.Entity {
             }
 
             return cards;
+        }
+
+        cycleDeck() {
+            let card = this.deck.pop();
+
+            card.reveal();
+            card.x = 120;
+
+            card.events.onDragUpdate.add(this.onHoldingCardDragMove, this);
+            card.events.onDragStop.add(this.onHoldingCardDragEnd, this);
+
+            this.visibleDeck.push(card);
         }
     }
 }
