@@ -18,7 +18,7 @@ module Ala3.State {
             this.add.existing(this.shredder);
             //shredder.events.onInputDown.add(this.onToolClick, this);
 
-            let stapler = new Entity.Stapler(this.game, 429, 335);
+            let stapler = new Entity.Stapler(this.game, 429, 348);
             this.add.existing(stapler);
             stapler.events.onInputDown.add(this.onToolClick, this);
 

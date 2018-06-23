@@ -14,11 +14,9 @@ module Ala3.Entity {
 
             this.completeStacks = [[], [], [], []];
             this.holdingStacks = [[], [], [], [], [], [], []];
-
-            let cardCount = 52;
             this.deck = [];
 
-            for (let i = 0; i < cardCount; i++) {
+            for (let i = 0; i < 52; i++) {
                 let card = new Card(game, i);
 
                 this.deck.push(card);
@@ -36,7 +34,7 @@ module Ala3.Entity {
             this.tableauPos = {
                 x: 61,
                 y: 158,
-                vSpacing: 14,
+                vSpacing: 18,
                 stackSpacing: cardSize.w + 6,
                 width: 0,
                 height: 0,
@@ -63,11 +61,21 @@ module Ala3.Entity {
                 for (let j = 0; j <= i; j++) {
                     card = this.deck.pop();
                     stack.push(card);
-                    this.addChild(card);
 
-                    card.x = this.tableauPos.x + (i * this.tableauPos.stackSpacing);
-                    card.y = this.tableauPos.y + (j * this.tableauPos.vSpacing);
+                    if (j === 0) {
+                        this.addChild(card);
+                        card.x = this.tableauPos.x + (i * this.tableauPos.stackSpacing);
+                        card.y = this.tableauPos.y + (j * this.tableauPos.vSpacing);
+                    } else {
+                        let parentCard = stack[stack.length - 2];
+                        card.x = 0;
+                        card.y = this.tableauPos.vSpacing;
+                        parentCard.addChild(card);
+                    }
+
                     card.stackIndex = i;
+
+                    card.events.onDragStart.add(this.onHoldingCardDragStart, this);
                     card.events.onDragUpdate.add(this.onHoldingCardDragMove, this);
                     card.events.onDragStop.add(this.onHoldingCardDragEnd, this);
                 }
@@ -77,6 +85,10 @@ module Ala3.Entity {
             }
 
             window['solitaire'] = this;
+        }
+
+        onHoldingCardDragStart(card: Card, pointer: Phaser.Pointer) {
+            // bring all cards to front
         }
 
         onHoldingCardDragMove(card: Card, pointer: Phaser.Pointer) {
@@ -105,7 +117,7 @@ module Ala3.Entity {
 
                 // is it allowed to be dropped here?
 
-                if (stack.length === 0) {
+                if (stack.length === 0 && card.value === Card.VALUE_KING) {
                     this.moveCardToStack(card, i);
                     return;
                 }
@@ -125,15 +137,32 @@ module Ala3.Entity {
         moveCardToStack(card: Card, stackIndex: number) {
             let stack = this.holdingStacks[stackIndex];
             let previousStack = this.holdingStacks[card.stackIndex];
+            let newParent = stack[stack.length - 1];
 
-            let x = this.tableauPos.x + (stackIndex * this.tableauPos.stackSpacing);
-            let y = this.tableauPos.y + (stack.length * this.tableauPos.vSpacing);
+            /*let x = this.tableauPos.x + (stackIndex * this.tableauPos.stackSpacing);
+            let y = this.tableauPos.y + (stack.length * this.tableauPos.vSpacing);*/
 
             previousStack.pop();
             stack.push(card);
 
-            card.snapTo(x, y);
+            if (newParent) {
+                // window['card'] = card;
+                newParent.addChild(card);
+                card.x = 0;
+                card.y = this.tableauPos.vSpacing;
+            }
+
             card.stackIndex = stackIndex;
+
+            // reveal next card
+            if (previousStack.length) {
+                previousStack[previousStack.length - 1].reveal();
+            }
+
+            /*let tween = card.snapTo(x, y);
+            tween.onComplete.add(function () {
+
+            }, this);*/
         }
     }
 }

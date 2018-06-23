@@ -1,13 +1,14 @@
 module Ala3.Entity {
     export class Card extends Phaser.Sprite {
         static SUIT_LABEL = [
-          'Hearts',
-          'Diamonds',
-          'Spades',
-          'Clubs'
+            'Hearts',
+            'Diamonds',
+            'Spades',
+            'Clubs'
         ];
 
         static SUIT_ICON = ['♥', '♦', '♠', '♣'];
+        static VALUE_KING: number = 12;
 
         game: Game;
         suit: number;
@@ -17,7 +18,7 @@ module Ala3.Entity {
         stackIndex: number;
         startDragPos: Phaser.Point;
 
-        constructor(game, id:number) {
+        constructor(game, id: number) {
             super(game, 0, 0, 'card-back');
 
             this.suit = Math.floor(id / 13);
@@ -50,7 +51,7 @@ module Ala3.Entity {
                     label = 'Q';
                     break;
 
-                case 12:
+                case Card.VALUE_KING:
                     label = 'K';
                     break;
 
@@ -71,9 +72,9 @@ module Ala3.Entity {
 
                 // re-order z-index
 
-                let i = this.parent.children.indexOf(this);
+                /*let i = this.parent.children.indexOf(this);
                 this.parent.children.slice(i, 1);
-                this.parent.children.push(this);
+                this.parent.children.push(this);*/
             }, this);
         }
 
@@ -81,8 +82,8 @@ module Ala3.Entity {
             this.snapTo(this.startDragPos.x, this.startDragPos.y);
         }
 
-        snapTo(x, y) {
-            this.game.add.tween(this).to({
+        snapTo(x, y): Phaser.Tween {
+            return this.game.add.tween(this).to({
                 x: x,
                 y: y
             }, 1000, Phaser.Easing.Elastic.Out, true);
