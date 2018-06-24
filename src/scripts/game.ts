@@ -22,10 +22,11 @@ module Ala3 {
             super.boot();
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             this.scale.setMinMax(0, 0, 1024, 768);
+
+            this.music = new Phaser.Sound(this, 'track-1', 0.5, true);
         }
 
         playMusic() {
-            this.music = new Phaser.Sound(this, 'track-1', 0.5, true);
             if (!this.music.isPlaying) {
                 this.music.play();
             }
