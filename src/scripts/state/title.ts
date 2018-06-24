@@ -1,6 +1,7 @@
 module Ala3.State {
     export class Title extends Phaser.State {
         game:Ala3.Game;
+        sounds: any;
 
         create() {
             this.add.sprite(0, 0, 'title-screen');
@@ -82,10 +83,11 @@ module Ala3.State {
                 }
             }, this);
 
+            this.sounds = {
+                ambient: this.game.add.audio( 'ambient', 1, true)
+            };
 
-
-
-            this.game.playMusic();
+            this.sounds.ambient.play();
         }
 
         startGame(difficulty: number) {

@@ -19,6 +19,8 @@ module Ala3.State {
         static LOSE_CONDITION_TIME: number = 2;
         static WIN_CONDITION: number = 3;
 
+        game:Ala3.Game;
+
         cursorTool: Phaser.Sprite;
         inboxItems: Phaser.Sprite[];
         itemInProgress: Entity.Paper;
@@ -45,8 +47,7 @@ module Ala3.State {
         create() {
             this.initStatics();
 
-            let bg = this.add.sprite(0, 0, 'bg');
-            bg.alpha = 0.6;
+            this.add.sprite(0, 0, 'bg');
 
             this.shredder = new Entity.Shredder(this.game, 332, 146);
             this.add.existing(this.shredder);
@@ -87,8 +88,7 @@ module Ala3.State {
                 paperIn: this.game.add.audio( 'paper-in'),
                 paperOut: this.game.add.audio( 'paper-out'),
                 pickUp: this.game.add.audio( 'pick-up'),
-                putDown: this.game.add.audio( 'put-down'),
-                ambient: this.game.add.audio( 'ambient', 1, true)
+                putDown: this.game.add.audio( 'put-down')
             };
 
             this.inboxItems = [];
@@ -103,7 +103,7 @@ module Ala3.State {
             this.clockTimer.start();
             this.startTime = this.game.time.now;
 
-            this.sounds.ambient.play();
+            this.game.playMusic();
         }
 
         update() {

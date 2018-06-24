@@ -14,7 +14,10 @@ module.exports = function (grunt) {
       prod: {
         src: ['src/scripts/**/*.ts'],
         reference: "src/refs.d.ts",
-        out: 'dist/game.min.js'
+        out: 'dist/game.min.js',
+        options: {
+          sourceMap: false
+        }
       }
     },
 
