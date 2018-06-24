@@ -10,12 +10,12 @@ module Ala3.State {
                 h: 148
             };
 
-            let y = 293;
+            let y = 319;
 
             let buttons = {};
 
             buttons[Game.DIFFICULTY_EASY] = new Phaser.Rectangle(
-                476,
+                477,
                 y,
                 cardSize.w,
                 cardSize.h
@@ -35,16 +35,55 @@ module Ala3.State {
                 cardSize.h
             );
 
+            let credits = {
+                dj: new Phaser.Rectangle(
+                    0,
+                    574,
+                    171,
+                    71
+                ),
+                jk: new Phaser.Rectangle(
+                    93,
+                    656,
+                    158,
+                    76
+                ),
+                al: new Phaser.Rectangle(
+                    281,
+                    552,
+                    129,
+                    84
+                )
+            };
+
             this.game.input.onDown.add(function (pointer: Phaser.Pointer) {
                 for (let b in buttons) {
                     let button = buttons[b];
 
                     if (button.contains(pointer.x, pointer.y)) {
                         this.startGame(parseInt(b));
-                        break;
+                        return;
+                    }
+                }
+
+                for (let c in credits) {
+                    let credit = credits[c];
+
+                    if (credit.contains(pointer.x, pointer.y)) {
+
+                        if (c === 'dj') {
+                            window.open('https://twitter.com/cloakedninjas');
+                        } else if (c === 'al') {
+                            window.open('https://twitter.com/treslapin');
+                        } else if (c === 'jk') {
+                            window.open('https://twitter.com/thedorkulon');
+                        }
                     }
                 }
             }, this);
+
+
+
 
             this.game.playMusic();
         }

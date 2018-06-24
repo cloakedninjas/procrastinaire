@@ -4,3 +4,4 @@
 src/scripts/.baseDir.ts
 node_modules
 public
+dist
