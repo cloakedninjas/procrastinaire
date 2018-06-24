@@ -2,6 +2,10 @@ module Ala3.State {
     export class Game extends Phaser.State {
         static MAX_INBOX_ITEMS: number = 9;
 
+        static DIFFICULTY_EASY: number = 1;
+        static DIFFICULTY_MEDIUM: number = 2;
+        static DIFFICULTY_HARD: number = 3;
+
         cursorTool: Phaser.Sprite;
         inboxItems: Phaser.Sprite[];
         itemInProgress: Entity.Paper;
@@ -10,8 +14,13 @@ module Ala3.State {
         shredder: Entity.Shredder;
         currentTool: Entity.Tool;
 
+        difficulty: number;
         maxAvailScore: number = 0;
         currentScore: number = 0;
+
+        init(difficulty: number) {
+            this.difficulty = difficulty;
+        }
 
         create() {
             this.initStatics();
