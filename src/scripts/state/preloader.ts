@@ -46,6 +46,18 @@ module Ala3.State {
             this.load.image('clock-2', 'assets/images/clock-3.png');
             this.load.image('clock-3', 'assets/images/clock-4.png');
             this.load.image('clock-4', 'assets/images/clock-5.png');
+
+            this.load.audio('track-1', 'assets/audio/track-1.mp3');
+
+            this.load.audio('paper-in', 'assets/audio/paper-in.mp3');
+            this.load.audio('paper-out', 'assets/audio/paper-out.mp3');
+            this.load.audio('paperclip', 'assets/audio/paperclip.mp3');
+            this.load.audio('pick-up', 'assets/audio/pick-up.mp3');
+            this.load.audio('put-down', 'assets/audio/put-down.mp3');
+            this.load.audio('shred', 'assets/audio/shred.mp3');
+            this.load.audio('sign', 'assets/audio/sign.mp3');
+            this.load.audio('stamp', 'assets/audio/stamp.mp3');
+            this.load.audio('stapler', 'assets/audio/stapler.mp3');
         }
 
         create() {

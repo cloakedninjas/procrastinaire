@@ -1,5 +1,6 @@
 module Ala3.State {
     export class Title extends Phaser.State {
+        game:Ala3.Game;
 
         create() {
             this.add.sprite(0, 0, 'title-screen');
@@ -44,6 +45,8 @@ module Ala3.State {
                     }
                 }
             }, this);
+
+            this.game.playMusic();
         }
 
         startGame(difficulty: number) {

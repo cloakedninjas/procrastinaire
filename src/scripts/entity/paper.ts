@@ -13,6 +13,7 @@ module Ala3.Entity {
             y: number
         };
         tasks: any;
+        sounds: any;
 
         constructor(game) {
             super(game, 0, 0, 'paper-active');
@@ -93,6 +94,13 @@ module Ala3.Entity {
                     }
                 }
             }
+
+            this.sounds = {};
+            this.sounds[Tool.TASK_CLIP] = this.game.add.audio( 'paperclip');
+            this.sounds[Tool.TASK_SHRED] = this.game.add.audio( 'shred');
+            this.sounds[Tool.TASK_PEN] = this.game.add.audio( 'sign');
+            this.sounds[Tool.TASK_STAMP] = this.game.add.audio( 'stamp');
+            this.sounds[Tool.TASK_STAPLER] = this.game.add.audio( 'stapler');
         }
 
         begin() {
@@ -151,6 +159,8 @@ module Ala3.Entity {
                 let mark = new Phaser.Sprite(this.game, x, y, Tool.MARKS[toolId]);
                 this.addChild(mark);
             }
+
+            this.sounds[toolId].play();
         }
 
         calcScore():any {

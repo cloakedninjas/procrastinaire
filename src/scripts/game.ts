@@ -3,6 +3,8 @@
 module Ala3 {
     export class Game extends Phaser.Game {
 
+        music: Phaser.Sound;
+
         constructor() {
             super({
                 width: 1024,
@@ -20,6 +22,11 @@ module Ala3 {
             super.boot();
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             this.scale.setMinMax(0, 0, 1024, 768);
+        }
+
+        playMusic() {
+            this.music = new Phaser.Sound(this, 'track-1', 0.6, true);
+            this.music.play();
         }
     }
 }

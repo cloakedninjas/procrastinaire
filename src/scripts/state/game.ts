@@ -29,6 +29,8 @@ module Ala3.State {
         minCounter: number = 0;
         clockTimer: Phaser.Timer;
 
+        sounds: any;
+
         init(difficulty: number) {
             this.difficulty = difficulty;
         }
@@ -73,8 +75,14 @@ module Ala3.State {
             this.trayOuterInbox = this.add.sprite(57, 424, 'tray-outer-inbox');
             this.outbox = this.add.sprite(896, 424, 'outbox');
 
-            this.inboxItems = [];
+            this.sounds = {
+                paperIn: this.game.add.audio( 'paper-in'),
+                paperOut: this.game.add.audio( 'paper-out'),
+                pickUp: this.game.add.audio( 'pick-up'),
+                putDown: this.game.add.audio( 'put-down')
+            };
 
+            this.inboxItems = [];
             this.addPaperToInbox();
 
             window['state'] = this;
@@ -139,6 +147,8 @@ module Ala3.State {
             if (this.inboxItems.length === 5) {
                 this.computer.showPopup('You know you have some work piling up right?');
             }
+
+            this.sounds.paperIn.play();
         }
 
         shouldAddWork() {
@@ -171,6 +181,8 @@ module Ala3.State {
             this.itemInProgress.events.onInputDown.add(this.clickOnPaper, this);
 
             window['paper'] = this.itemInProgress;
+
+            this.sounds.paperOut.play();
         }
 
         checkWorkQuality() {
@@ -194,6 +206,8 @@ module Ala3.State {
                 if (this.itemInProgress) {
                     this.itemInProgress.input.enableDrag();
                 }
+
+                this.sounds.putDown.play();
             } else {
                 // picked up tool
 
@@ -220,6 +234,8 @@ module Ala3.State {
                     this.itemInProgress.input.disableDrag();
                     this.itemInProgress.input.bringToTop = false; // fix for paper onDrag changing z-index
                 }
+
+                this.sounds.pickUp.play();
             }
         }
 
