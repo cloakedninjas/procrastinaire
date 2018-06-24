@@ -26,11 +26,11 @@ module Ala3.State {
             this.add.existing(penCup);
             penCup.events.onInputDown.add(this.onToolClick, this);
 
-            let paperclips = new Entity.Paperclips(this.game, 288, 397);
+            let paperclips = new Entity.Paperclips(this.game, 284, 393);
             this.add.existing(paperclips);
             paperclips.events.onInputDown.add(this.onToolClick, this);
 
-            let stamp = new Entity.Stamp(this.game, 178, 434);
+            let stamp = new Entity.Stamp(this.game, 178, 514);
             this.add.existing(stamp);
             stamp.events.onInputDown.add(this.onToolClick, this);
 

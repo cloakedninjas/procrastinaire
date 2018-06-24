@@ -13,8 +13,8 @@ module Ala3.State {
             this.load.image('card-front', 'assets/images/card-front.png');
 
             this.load.image('stapler', 'assets/images/stapler.png');
-            this.load.image('paperclips-desk', 'assets/images/paperclips-desk.png');
-            this.load.image('stamp-desk', 'assets/images/stamp-desk.png');
+            this.load.image('paperclip-cup', 'assets/images/paperclip-cup.png');
+            this.load.image('stamp-top', 'assets/images/stamp-top.png');
             this.load.image('shredder', 'assets/images/shredder.png');
             this.load.image('pencup-desk', 'assets/images/pencup-desk.png');
             this.load.image('paper-active', 'assets/images/paper-active.png');
