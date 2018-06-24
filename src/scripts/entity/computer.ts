@@ -7,6 +7,7 @@ module Ala3.Entity {
         completeStacks: Card[][];
         holdingStacks: Card[][];
 
+        deckPos: any;
         tableauPos: any;
         foundationPos: any;
         isOverTableau: boolean = false;
@@ -110,23 +111,39 @@ module Ala3.Entity {
                 card.reveal();
             }
 
+            this.deckPos = {
+                x: 60,
+                y: 85,
+                visibleX: 120
+            };
+
             for (let i = 0; i < this.deck.length; i++) {
                 let card = this.deck[i];
-                card.x = 60;
-                card.y = 85;
+                card.x = this.deckPos.x;
+                card.y = this.deckPos.y;
                 this.addChild(card);
             }
 
-            this.cycleDeck();
+            let deckBounds = new Phaser.Rectangle(
+                this.x + this.deckPos.x,
+                this.y + this.deckPos.y,
+                cardSize.w,
+                cardSize.h
+            );
+
+            game.input.onDown.add(function (pointer: Phaser.Pointer) {
+                if (deckBounds.contains(pointer.x, pointer.y)) {
+                    this.cycleDeck();
+                }
+            }, this);
+
 
             window['solitaire'] = this;
         }
 
         onHoldingCardDragStart(card: Card, pointer: Phaser.Pointer) {
             if (card.stackIndex === null) {
-                let i = this.children.indexOf(card);
-                this.children.splice(i, 1);
-                this.children.push(card);
+                this.bringCardToTop(card);
             } else {
                 this.bringStackToTop(card);
             }
@@ -213,7 +230,6 @@ module Ala3.Entity {
             if (card.stackIndex === null) {
                 this.removeCardFromDeck(card);
                 stack.push(card);
-                this.cycleDeck();
             } else {
                 let previousStack = this.holdingStacks[card.stackIndex];
 
@@ -262,7 +278,6 @@ module Ala3.Entity {
             if (card.stackIndex === null) {
                 // card came from deck
                 this.removeCardFromDeck(card);
-                this.cycleDeck();
             } else {
                 // card came from tableau
                 let previousStack = this.holdingStacks[card.stackIndex];
@@ -286,9 +301,13 @@ module Ala3.Entity {
                 parent = parent.parent;
             }
 
-            let i = this.children.indexOf(topChild);
+            this.bringCardToTop(topChild);
+        }
+
+        bringCardToTop(card: Card) {
+            let i = this.children.indexOf(card);
             this.children.splice(i, 1);
-            this.children.push(topChild);
+            this.children.push(card);
         }
 
         getChildCards(card: Card) {
@@ -306,16 +325,27 @@ module Ala3.Entity {
         }
 
         cycleDeck() {
-            let card = this.deck.pop();
+            if (this.deck.length > 0) {
+                let card = this.deck.pop();
 
-            card.reveal();
-            card.x = 120;
+                card.reveal();
+                card.x = this.deckPos.visibleX;
+                this.bringCardToTop(card);
 
-            card.events.onDragStart.add(this.onHoldingCardDragStart, this);
-            card.events.onDragUpdate.add(this.onHoldingCardDragMove, this);
-            card.events.onDragStop.add(this.onHoldingCardDragEnd, this);
+                card.events.onDragStart.add(this.onHoldingCardDragStart, this);
+                card.events.onDragUpdate.add(this.onHoldingCardDragMove, this);
+                card.events.onDragStop.add(this.onHoldingCardDragEnd, this);
 
-            this.visibleDeck.push(card);
+                this.visibleDeck.push(card);
+            } else {
+                this.deck = this.visibleDeck;
+                this.visibleDeck = [];
+
+                this.deck.forEach(function(card: Card) {
+                    card.x = this.deckPos.x;
+                    card.hide();
+                }, this);
+            }
         }
 
         private setCardPosInTableau(card: Card, stackIndex: number, lastCardIndex: number) {

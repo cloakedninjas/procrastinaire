@@ -32,36 +32,43 @@ module Ala3.Entity {
             let game = this.game;
             let width = this.width;
             let height = this.height;
-            let bmd = new Phaser.BitmapData(game, 'card', width, height);
+            let key = 'card-' + this.suit + '-' + this.value;
+            let bmd;
 
-            bmd.draw('card-front');
+            if (game.cache.checkBitmapDataKey(key)) {
+                bmd = game.cache.getBitmapData(key);
+            } else {
+                bmd = new Phaser.BitmapData(game, key, width, height);
+                bmd.draw('card-front');
 
-            let fontStyle = '20px Arial';
-            let label;
+                let fontStyle = '20px Arial';
+                let label;
 
-            switch (this.value) {
-                case 0:
-                    label = 'A';
-                    break;
+                switch (this.value) {
+                    case 0:
+                        label = 'A';
+                        break;
 
-                case 10:
-                    label = 'J';
-                    break;
+                    case 10:
+                        label = 'J';
+                        break;
 
-                case 11:
-                    label = 'Q';
-                    break;
+                    case 11:
+                        label = 'Q';
+                        break;
 
-                case Card.VALUE_KING:
-                    label = 'K';
-                    break;
+                    case Card.VALUE_KING:
+                        label = 'K';
+                        break;
 
-                default:
-                    label = this.value + 1;
+                    default:
+                        label = this.value + 1;
+                }
+
+                label += Card.SUIT_ICON[this.suit];
+                bmd.text(label, 6, 24, fontStyle, this.colour);
+                game.cache.addBitmapData(key, bmd);
             }
-
-            label += Card.SUIT_ICON[this.suit];
-            bmd.text(label, 6, 24, fontStyle, this.colour);
 
             this.loadTexture(bmd);
 
@@ -71,6 +78,10 @@ module Ala3.Entity {
             this.events.onDragStart.add(function () {
                 this.startDragPos = {x: this.x, y: this.y};
             }, this);
+        }
+
+        hide() {
+            this.loadTexture('card-back');
         }
 
         returnToDragStartPos() {
