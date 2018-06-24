@@ -18,6 +18,7 @@ module Ala3.Entity {
         moves: number = 0;
         pointsLabel: Phaser.Text;
         points: number = 0;
+        popupShowing: boolean = false;
 
         constructor(game, x, y) {
             super(game, x, y, 'computer');
@@ -394,6 +395,17 @@ module Ala3.Entity {
         incrementPoints(big: boolean) {
             this.points += big ? 25 : 10;
             this.pointsLabel.text = 'Points: ' + this.points;
+        }
+
+        showPopup(message: string) {
+            let p = new Entity.Popup(this.game, message);
+            this.addChild(p);
+
+            p.events.onInputDown.add(function () {
+                p.destroy();
+                this.popupShowing = false;
+            }, this, null, p);
+            this.popupShowing = true;
         }
 
         private setCardPosInTableau(card: Card, stackIndex: number, lastCardIndex: number) {

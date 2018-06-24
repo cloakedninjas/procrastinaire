@@ -135,6 +135,10 @@ module Ala3.State {
             this.add.existing(paper);
 
             this.trayOuterInbox.bringToTop();
+
+            if (this.inboxItems.length === 5) {
+                this.computer.showPopup('You know you have some work piling up right?');
+            }
         }
 
         shouldAddWork() {
@@ -143,7 +147,7 @@ module Ala3.State {
             }
 
             if (this.inboxItems.length === Game.MAX_INBOX_ITEMS) {
-                //this.gameOver(Game.LOSE_CONDITION_WORK);
+                this.gameOver(Game.LOSE_CONDITION_WORK);
             }
 
             // queue another
