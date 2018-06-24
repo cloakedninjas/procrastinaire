@@ -1,8 +1,15 @@
 module Ala3.State {
     export class Game extends Phaser.State {
         static MAX_INBOX_ITEMS: number = 15;
-        static MIN_DELAY_ADD_WORK: number = 9;
-        static MAX_DELAY_ADD_WORK: number = 15;
+
+        static MIN_DELAY_ADD_WORK_EASY: number = 9;
+        static MAX_DELAY_ADD_WORK_EASY: number = 15;
+
+        static MIN_DELAY_ADD_WORK_MEDIUM: number = 7;
+        static MAX_DELAY_ADD_WORK_MEDIUM: number = 13;
+
+        static MIN_DELAY_ADD_WORK_HARD: number = 6;
+        static MAX_DELAY_ADD_WORK_HARD: number = 10;
 
         static DIFFICULTY_EASY: number = 1;
         static DIFFICULTY_MEDIUM: number = 2;
@@ -163,8 +170,26 @@ module Ala3.State {
                 this.gameOver(Game.LOSE_CONDITION_WORK);
             }
 
+            let min;
+            let max;
+            switch (this.difficulty) {
+                case Game.DIFFICULTY_EASY:
+                    min = Game.MIN_DELAY_ADD_WORK_EASY;
+                    max = Game.MAX_DELAY_ADD_WORK_EASY;
+                    break;
+
+                case Game.DIFFICULTY_MEDIUM:
+                    min = Game.MIN_DELAY_ADD_WORK_MEDIUM;
+                    max = Game.MAX_DELAY_ADD_WORK_MEDIUM;
+                    break;
+
+                case Game.DIFFICULTY_HARD:
+                    min = Game.MIN_DELAY_ADD_WORK_HARD;
+                    max = Game.MAX_DELAY_ADD_WORK_HARD;
+                    break;
+            }
             // queue another
-            let rand = Phaser.Math.random(Game.MIN_DELAY_ADD_WORK, Game.MAX_DELAY_ADD_WORK + 1);
+            let rand = Phaser.Math.random(min, max + 1);
             this.game.time.events.add(rand * 1000, this.shouldAddWork, this);
         }
 
