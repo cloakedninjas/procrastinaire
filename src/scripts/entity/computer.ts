@@ -20,7 +20,6 @@ module Ala3.Entity {
         points: number = 0;
         popupShowing: boolean = false;
         difficulty: number;
-
         gameComplete:Phaser.Signal;
 
         constructor(game, x: number, y: number, difficulty: number) {

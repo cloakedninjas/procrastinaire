@@ -10,7 +10,7 @@ module Ala3.State {
             this.load.image('bg', 'assets/images/background.png');
 
             this.load.image('computer', 'assets/images/computer-screen.png');
-            this.load.image('popup', 'assets/images/pop-up.png');
+            //this.load.image('popup', 'assets/images/pop-up.png');
             this.load.image('computer-shine', 'assets/images/computer-shine.png');
 
             this.load.image('card-front', 'assets/images/card-front.png');
