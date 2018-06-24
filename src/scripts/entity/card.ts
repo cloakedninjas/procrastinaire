@@ -9,13 +9,14 @@ module Ala3.Entity {
 
         static SUIT_ICON = ['♥', '♦', '♠', '♣'];
         static VALUE_KING: number = 12;
+        static VALUE_ACE: number = 0;
 
         game: Game;
         suit: number;
         value: number;
         colour: string;
         revealed: boolean = false;
-        stackIndex: number;
+        stackIndex: number = null;
         startDragPos: Phaser.Point;
 
         constructor(game, id: number) {
