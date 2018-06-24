@@ -39,6 +39,12 @@ module Ala3.State {
             this.load.image('signature', 'assets/images/signature.png');
             this.load.image('stamp', 'assets/images/stamp.png');
             this.load.image('staple', 'assets/images/staple.png');
+
+            this.load.image('clock-0', 'assets/images/clock-1.png');
+            this.load.image('clock-1', 'assets/images/clock-2.png');
+            this.load.image('clock-2', 'assets/images/clock-3.png');
+            this.load.image('clock-3', 'assets/images/clock-4.png');
+            this.load.image('clock-4', 'assets/images/clock-5.png');
         }
 
         create() {

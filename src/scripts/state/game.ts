@@ -19,11 +19,14 @@ module Ala3.State {
         outbox: Phaser.Sprite;
         shredder: Entity.Shredder;
         currentTool: Entity.Tool;
+        clock: Phaser.Sprite;
 
         difficulty: number;
         maxAvailScore: number = 0;
         currentScore: number = 0;
-        timeRemaining: number;
+        startTime: number;
+        minCounter: number = 0;
+        gameTimer: Phaser.Timer;
 
         init(difficulty: number) {
             this.difficulty = difficulty;
@@ -37,7 +40,6 @@ module Ala3.State {
 
             this.shredder = new Entity.Shredder(this.game, 335, 153);
             this.add.existing(this.shredder);
-            //shredder.events.onInputDown.add(this.onToolClick, this);
 
             let stapler = new Entity.Stapler(this.game, 425, 344);
             this.add.existing(stapler);
@@ -54,6 +56,8 @@ module Ala3.State {
             let stamp = new Entity.Stamp(this.game, 177, 434);
             this.add.existing(stamp);
             stamp.events.onInputDown.add(this.onToolClick, this);
+
+            this.clock = this.add.sprite(397, 29, 'clock-0');
 
             let computer = new Entity.Computer(this.game, 548, -7);
             this.add.existing(computer);
@@ -75,6 +79,11 @@ module Ala3.State {
             window['state'] = this;
 
             this.game.time.events.add(3000, this.shouldAddWork, this);
+
+            this.gameTimer = this.game.time.create();
+            this.gameTimer.repeat(Phaser.Timer.MINUTE * 5, 5, this.tickClock, this);
+            this.gameTimer.start();
+            this.startTime = this.game.time.now;
         }
 
         update() {
@@ -226,15 +235,26 @@ module Ala3.State {
             }
         }
 
-        gameOver(reason: number) {
-            let success = false;
+        tickClock() {
+            this.minCounter++;
+            this.clock.loadTexture('clock-' + this.minCounter);
 
-            if (reason === Game.LOSE_CONDITION_WORK || reason === Game.LOSE_CONDITION_TIME) {
+            if (this.minCounter === 5) {
+                this.gameOver(Game.LOSE_CONDITION_TIME);
+            }
+        }
+
+        gameOver(reason: number) {
+            let timeRemaining;
+
+            if (reason === Game.LOSE_CONDITION_TIME) {
+                timeRemaining = 0;
             } else {
+                timeRemaining = this.game.time.now - this.startTime;
             }
 
             this.game.state.start('scores', true, null,
-                reason, this.timeRemaining, this.currentScore / this.maxAvailScore);
+                reason, timeRemaining, (this.currentScore / this.maxAvailScore));
         }
     }
 }
