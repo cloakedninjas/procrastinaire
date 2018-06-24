@@ -144,7 +144,7 @@ module Ala3.Entity {
                 task.done++;
             }
 
-            if (task.done <= Paper.MAX_SAME_TASK) {
+            if (toolId !== Tool.TASK_SHRED && task.done <= Paper.MAX_SAME_TASK) {
                 let x = Entity.Paper.TOOL_MARKS[toolId][task.done - 1][0];
                 let y = Entity.Paper.TOOL_MARKS[toolId][task.done - 1][1];
                 // add tool icon

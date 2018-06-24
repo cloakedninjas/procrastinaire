@@ -16,7 +16,8 @@ module Ala3.Entity {
         isOverTableau: boolean = false;
         isOverFoundation: boolean = false;
         moves: number = 0;
-        moveLabel: Phaser.Text;
+        pointsLabel: Phaser.Text;
+        points: number = 0;
 
         constructor(game, x, y) {
             super(game, x, y, 'computer');
@@ -25,16 +26,6 @@ module Ala3.Entity {
             this.holdingStacks = [[], [], [], [], [], [], []];
             this.deck = [];
             this.wastePile = [];
-
-            for (let i = 0; i < 52; i++) {
-                let card = new Card(game, i);
-
-                this.deck.push(card);
-            }
-
-            this.deck = Helpers.shuffle(this.deck);
-
-            // build the tableau + foundation areas
 
             let cardSize = {
                 w: 52,
@@ -87,6 +78,18 @@ module Ala3.Entity {
             this.foundationPos.bounds.y2 = this.y + this.foundationPos.y + this.foundationPos.height;
 
             // fill cards
+
+            for (let i = 0; i < 52; i++) {
+                let card = new Card(game, i);
+
+                this.deck.push(card);
+            }
+
+            /*let assist = [];
+            assist.push(this.deck.splice(0, 1));
+            debugger;*/
+
+            this.deck = Helpers.shuffle(this.deck);
 
             for (let i = 0; i < this.holdingStacks.length; i++) {
                 let stack = this.holdingStacks[i];
@@ -147,12 +150,12 @@ module Ala3.Entity {
                 }
             }, this);
 
-            this.moveLabel = new Phaser.Text(game, 395, 390, 'Moves: 0', {
+            this.pointsLabel = new Phaser.Text(game, 385, 390, 'Points: 0', {
                 font: '14px Arial',
                 fill: '#333'
             });
 
-            this.addChild(this.moveLabel);
+            this.addChild(this.pointsLabel);
 
             window['solitaire'] = this;
         }
@@ -272,6 +275,7 @@ module Ala3.Entity {
 
             card.stackIndex = stackIndex;
             this.incrementMoveCounter();
+            this.incrementPoints(false);
         }
 
         moveCardToFoundation(card: Card, stackIndex: number) {
@@ -308,6 +312,7 @@ module Ala3.Entity {
 
             stack.push(card);
             this.incrementMoveCounter();
+            this.incrementPoints(true);
 
             // check win condition
             let done = true;
@@ -384,7 +389,11 @@ module Ala3.Entity {
 
         incrementMoveCounter() {
             this.moves++;
-            this.moveLabel.text = 'Moves: ' + this.moves;
+        }
+
+        incrementPoints(big: boolean) {
+            this.points += big ? 25 : 10;
+            this.pointsLabel.text = 'Points: ' + this.points;
         }
 
         private setCardPosInTableau(card: Card, stackIndex: number, lastCardIndex: number) {

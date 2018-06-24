@@ -1,8 +1,8 @@
 module Ala3.State {
     export class Game extends Phaser.State {
         static MAX_INBOX_ITEMS: number = 15;
-        static MIN_DELAY_ADD_WORK: number = 5;
-        static MAX_DELAY_ADD_WORK: number = 10;
+        static MIN_DELAY_ADD_WORK: number = 9;
+        static MAX_DELAY_ADD_WORK: number = 15;
 
         static DIFFICULTY_EASY: number = 1;
         static DIFFICULTY_MEDIUM: number = 2;
@@ -20,13 +20,14 @@ module Ala3.State {
         shredder: Entity.Shredder;
         currentTool: Entity.Tool;
         clock: Phaser.Sprite;
+        computer: Entity.Computer;
 
         difficulty: number;
         maxAvailScore: number = 0;
         currentScore: number = 0;
         startTime: number;
         minCounter: number = 0;
-        gameTimer: Phaser.Timer;
+        clockTimer: Phaser.Timer;
 
         init(difficulty: number) {
             this.difficulty = difficulty;
@@ -59,8 +60,8 @@ module Ala3.State {
 
             this.clock = this.add.sprite(397, 29, 'clock-0');
 
-            let computer = new Entity.Computer(this.game, 548, -7);
-            this.add.existing(computer);
+            this.computer = new Entity.Computer(this.game, 548, -7);
+            this.add.existing(this.computer);
 
             let shine = new Phaser.Sprite(this.game, 921, 74, 'computer-shine');
             this.add.existing(shine);
@@ -80,9 +81,9 @@ module Ala3.State {
 
             this.game.time.events.add(3000, this.shouldAddWork, this);
 
-            this.gameTimer = this.game.time.create();
-            this.gameTimer.repeat(Phaser.Timer.MINUTE * 5, 5, this.tickClock, this);
-            this.gameTimer.start();
+            this.clockTimer = this.game.time.create();
+            this.clockTimer.repeat(Phaser.Timer.MINUTE, 5, this.tickClock, this);
+            this.clockTimer.start();
             this.startTime = this.game.time.now;
         }
 
@@ -246,15 +247,23 @@ module Ala3.State {
 
         gameOver(reason: number) {
             let timeRemaining;
+            let accuracy = 0;
 
-            if (reason === Game.LOSE_CONDITION_TIME) {
+            /*if (reason === Game.LOSE_CONDITION_TIME) {
                 timeRemaining = 0;
             } else {
                 timeRemaining = this.game.time.now - this.startTime;
+            }*/
+
+            let points = this.computer.points;
+            let gameWon = reason === Game.WIN_CONDITION;
+
+            if (this.maxAvailScore) {
+                accuracy = this.currentScore / this.maxAvailScore;
             }
 
             this.game.state.start('scores', true, null,
-                reason, timeRemaining, (this.currentScore / this.maxAvailScore));
+                points, accuracy, gameWon);
         }
     }
 }
