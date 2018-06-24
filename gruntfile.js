@@ -13,13 +13,8 @@ module.exports = function (grunt) {
       },
       prod: {
         src: ['src/scripts/**/*.ts'],
-        out: 'dist/game.min.js',
-        options: {
-          module: 'amd', //or commonjs
-          target: 'es5', //or es3
-          sourceMap: false,
-          declaration: false
-        }
+        reference: "src/refs.d.ts",
+        out: 'dist/game.min.js'
       }
     },
 
