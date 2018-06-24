@@ -1,8 +1,11 @@
 module Ala3.Entity {
     export class Computer extends Phaser.Sprite {
+        static STACK_DECK: number = 10;
+        static STACK_WASTE: number = 11;
+
         game: Game;
         deck: Card[];
-        visibleDeck: Card[];
+        wastePile: Card[];
 
         completeStacks: Card[][];
         holdingStacks: Card[][];
@@ -21,7 +24,7 @@ module Ala3.Entity {
             this.completeStacks = [[], [], [], []];
             this.holdingStacks = [[], [], [], [], [], [], []];
             this.deck = [];
-            this.visibleDeck = [];
+            this.wastePile = [];
 
             for (let i = 0; i < 52; i++) {
                 let card = new Card(game, i);
@@ -123,6 +126,7 @@ module Ala3.Entity {
                 let card = this.deck[i];
                 card.x = this.deckPos.x;
                 card.y = this.deckPos.y;
+                card.stackIndex = Computer.STACK_DECK;
                 this.addChild(card);
             }
 
@@ -149,8 +153,8 @@ module Ala3.Entity {
             window['solitaire'] = this;
         }
 
-        onHoldingCardDragStart(card: Card, pointer: Phaser.Pointer) {
-            if (card.stackIndex === null) {
+        onHoldingCardDragStart(card: Card) {
+            if (card.stackIndex === Computer.STACK_WASTE) {
                 this.bringCardToTop(card);
             } else {
                 this.bringStackToTop(card);
@@ -235,8 +239,8 @@ module Ala3.Entity {
             let newParent = stack[lastCardIndex];
             let childCards = this.getChildCards(card);
 
-            if (card.stackIndex === null) {
-                this.removeCardFromDeck(card);
+            if (card.stackIndex === Computer.STACK_WASTE) {
+                this.removeCardFromWaste(card);
                 stack.push(card);
             } else {
                 let previousStack = this.holdingStacks[card.stackIndex];
@@ -284,9 +288,9 @@ module Ala3.Entity {
 
             card.removeInputControl();
 
-            if (card.stackIndex === null) {
+            if (card.stackIndex === Computer.STACK_WASTE) {
                 // card came from deck
-                this.removeCardFromDeck(card);
+                this.removeCardFromWaste(card);
             } else {
                 // card came from tableau
                 let previousStack = this.holdingStacks[card.stackIndex];
@@ -340,19 +344,21 @@ module Ala3.Entity {
 
                 card.reveal();
                 card.x = this.deckPos.visibleX;
+                card.stackIndex = Computer.STACK_WASTE;
                 this.bringCardToTop(card);
 
                 card.events.onDragStart.add(this.onHoldingCardDragStart, this);
                 card.events.onDragUpdate.add(this.onHoldingCardDragMove, this);
                 card.events.onDragStop.add(this.onHoldingCardDragEnd, this);
 
-                this.visibleDeck.push(card);
+                this.wastePile.push(card);
             } else {
-                this.deck = this.visibleDeck;
-                this.visibleDeck = [];
+                this.deck = this.wastePile;
+                this.wastePile = [];
 
                 this.deck.forEach(function(card: Card) {
                     card.x = this.deckPos.x;
+                    card.stackIndex = Computer.STACK_DECK;
                     card.hide();
                 }, this);
             }
@@ -376,9 +382,9 @@ module Ala3.Entity {
             card.y = this.foundationPos.y;
         }
 
-        private removeCardFromDeck(card: Card) {
-            let i = this.deck.indexOf(card);
-            this.deck.splice(i, 1);
+        private removeCardFromWaste(card: Card) {
+            let i = this.wastePile.indexOf(card);
+            this.wastePile.splice(i, 1);
         }
     }
 }

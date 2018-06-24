@@ -16,7 +16,7 @@ module Ala3.Entity {
         value: number;
         colour: string;
         revealed: boolean = false;
-        stackIndex: number = null;
+        stackIndex: number;
         startDragPos: Phaser.Point;
 
         constructor(game, id: number) {
