@@ -16,17 +16,6 @@ module Ala3.Entity {
             super(game, x, y, key);
 
             this.inputEnabled = true;
-
-            Tool.ICONS[Tool.TASK_CLIP] = 'icon-paperclip';
-            Tool.ICONS[Tool.TASK_PEN] = 'icon-pen';
-            Tool.ICONS[Tool.TASK_SHRED] = 'icon-shredder';
-            Tool.ICONS[Tool.TASK_STAMP] = 'icon-stamp';
-            Tool.ICONS[Tool.TASK_STAPLER] = 'icon-staple';
-
-            Tool.MARKS[Tool.TASK_CLIP] = 'paperclip';
-            Tool.MARKS[Tool.TASK_PEN] = 'signature';
-            Tool.MARKS[Tool.TASK_STAMP] = 'stamp';
-            Tool.MARKS[Tool.TASK_STAPLER] = 'staple';
         }
     }
 }

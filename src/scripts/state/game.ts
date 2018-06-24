@@ -11,6 +11,8 @@ module Ala3.State {
         currentTool: Entity.Tool;
 
         create() {
+            this.initStatics();
+
             let bg = this.add.sprite(0, 0, 'bg');
             bg.alpha = 0.6;
 
@@ -61,6 +63,36 @@ module Ala3.State {
                 this.cursorTool.x = this.game.input.activePointer.x;
                 this.cursorTool.y = this.game.input.activePointer.y;
             }
+        }
+
+        initStatics() {
+            Entity.Tool.ICONS[Entity.Tool.TASK_CLIP] = 'icon-paperclip';
+            Entity.Tool.ICONS[Entity.Tool.TASK_PEN] = 'icon-pen';
+            Entity.Tool.ICONS[Entity.Tool.TASK_SHRED] = 'icon-shredder';
+            Entity.Tool.ICONS[Entity.Tool.TASK_STAMP] = 'icon-stamp';
+            Entity.Tool.ICONS[Entity.Tool.TASK_STAPLER] = 'icon-staple';
+
+            Entity.Tool.MARKS[Entity.Tool.TASK_CLIP] = 'paperclip';
+            Entity.Tool.MARKS[Entity.Tool.TASK_PEN] = 'signature';
+            Entity.Tool.MARKS[Entity.Tool.TASK_STAMP] = 'stamp';
+            Entity.Tool.MARKS[Entity.Tool.TASK_STAPLER] = 'staple';
+
+            Entity.Paper.TOOL_MARKS = {};
+            Entity.Paper.TOOL_MARKS[Entity.Tool.TASK_CLIP] = [
+                [-100, -178], [-63, -178], [-25, -178]
+            ];
+
+            Entity.Paper.TOOL_MARKS[Entity.Tool.TASK_PEN] = [
+                [-148, 4], [14, 4], [-110, -87]
+            ];
+
+            Entity.Paper.TOOL_MARKS[Entity.Tool.TASK_STAMP] = [
+                [57, 6], [0, -29], [22, -5]
+            ];
+
+            Entity.Paper.TOOL_MARKS[Entity.Tool.TASK_STAPLER] = [
+                [-139, -156], [111, -158], [20, -158]
+            ];
         }
 
         addPaperToInbox() {

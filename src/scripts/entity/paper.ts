@@ -5,6 +5,8 @@ module Ala3.Entity {
         static MAX_TASKS_PER_WORK: number = 6;
         static MAX_SAME_TASK: number = 3;
 
+        static TOOL_MARKS: {};
+
         game: Game;
         startDragPos: {
             x: number,
@@ -142,9 +144,13 @@ module Ala3.Entity {
                 task.done++;
             }
 
-            // add tool icon
-            let mark = new Phaser.Sprite(this.game, 0, 0, Tool.MARKS[toolId]);
-            this.addChild(mark);
+            if (task.done <= Paper.MAX_SAME_TASK) {
+                let x = Entity.Paper.TOOL_MARKS[toolId][task.done - 1][0];
+                let y = Entity.Paper.TOOL_MARKS[toolId][task.done - 1][1];
+                // add tool icon
+                let mark = new Phaser.Sprite(this.game, x, y, Tool.MARKS[toolId]);
+                this.addChild(mark);
+            }
         }
 
         calcScore() {
