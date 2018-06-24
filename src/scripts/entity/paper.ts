@@ -153,7 +153,8 @@ module Ala3.Entity {
             }
         }
 
-        calcScore() {
+        calcScore():any {
+            let availPoints = 0;
             let correct = 0;
 
             if (!this.tasks[Tool.TASK_SHRED].requested && this.tasks[Tool.TASK_SHRED].done) {
@@ -162,6 +163,7 @@ module Ala3.Entity {
 
             for (let taskId in this.tasks) {
                 let task = this.tasks[taskId];
+                availPoints += task.requested;
 
                 if (task.requested) {
                     correct += Math.min(task.done, task.requested);
@@ -170,7 +172,10 @@ module Ala3.Entity {
                 }
             }
 
-            return correct;
+            return {
+                available: availPoints,
+                correct: correct
+            };
         }
     }
 }

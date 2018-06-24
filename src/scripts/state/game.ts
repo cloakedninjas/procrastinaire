@@ -10,6 +10,9 @@ module Ala3.State {
         shredder: Entity.Shredder;
         currentTool: Entity.Tool;
 
+        maxAvailScore: number = 0;
+        currentScore: number = 0;
+
         create() {
             this.initStatics();
 
@@ -139,7 +142,11 @@ module Ala3.State {
         checkWorkQuality() {
             let score = this.itemInProgress.calcScore();
 
+            this.maxAvailScore += score.available;
+            this.currentScore += score.correct;
+
             console.log('score', score);
+            console.log('running score', this.currentScore, this.maxAvailScore);
 
             this.itemInProgress.destroy();
             this.itemInProgress = null;
