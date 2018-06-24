@@ -77,12 +77,6 @@ module Ala3.Entity {
 
             // add icons
             let i = 0;
-            let icons = {};
-            icons[Tool.TASK_CLIP] = 'icon-paperclip';
-            icons[Tool.TASK_PEN] = 'icon-pen';
-            icons[Tool.TASK_SHRED] = 'icon-shredder';
-            icons[Tool.TASK_STAMP] = 'icon-stamp';
-            icons[Tool.TASK_STAPLER] = 'icon-staple';
 
             for (let taskId in this.tasks) {
                 let task = this.tasks[taskId];
@@ -91,7 +85,7 @@ module Ala3.Entity {
                     for (let j = 0; j < task.requested; j++) {
                         let x = ((i % 2) * 46) + 20;
                         let y = (Math.floor(i / 2) * 27) + 3;
-                        let stamp = new Phaser.Sprite(game, x, y, icons[taskId]);
+                        let stamp = new Phaser.Sprite(game, x, y, Tool.ICONS[taskId]);
                         postit.addChild(stamp);
                         i++;
                     }
@@ -147,6 +141,10 @@ module Ala3.Entity {
             if (task) {
                 task.done++;
             }
+
+            // add tool icon
+            let mark = new Phaser.Sprite(this.game, 0, 0, Tool.MARKS[toolId]);
+            this.addChild(mark);
         }
 
         calcScore() {

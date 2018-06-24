@@ -33,6 +33,11 @@ module Ala3.State {
             this.load.image('pen-active', 'assets/images/pen-active.png');
             this.load.image('stamp-active', 'assets/images/stamp-active.png');
             this.load.image('stapler-active', 'assets/images/stapler-active.png');
+
+            this.load.image('paperclip', 'assets/images/paperclip.png');
+            this.load.image('signature', 'assets/images/signature.png');
+            this.load.image('stamp', 'assets/images/stamp.png');
+            this.load.image('staple', 'assets/images/staple.png');
         }
 
         create() {
