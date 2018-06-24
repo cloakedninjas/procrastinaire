@@ -103,7 +103,7 @@ module Ala3.State {
             this.clockTimer.start();
             this.startTime = this.game.time.now;
 
-            this.game.playMusic();
+            this.game.playMusic(this.difficulty);
         }
 
         update() {
