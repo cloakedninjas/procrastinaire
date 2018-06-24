@@ -51,6 +51,7 @@ module Ala3.State {
             this.load.image('clock-2', 'assets/images/clock-3.png');
             this.load.image('clock-3', 'assets/images/clock-4.png');
             this.load.image('clock-4', 'assets/images/clock-5.png');
+            this.load.image('clock-5', 'assets/images/clock-6.png');
 
             this.load.audio('ambient', 'assets/audio/ambient.mp3');
             this.load.audio('track-1', 'assets/audio/track-1.mp3');

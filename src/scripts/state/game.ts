@@ -3,13 +3,13 @@ module Ala3.State {
         static MAX_INBOX_ITEMS: number = 15;
 
         static MIN_DELAY_ADD_WORK_EASY: number = 9;
-        static MAX_DELAY_ADD_WORK_EASY: number = 15;
+        static MAX_DELAY_ADD_WORK_EASY: number = 13;
 
-        static MIN_DELAY_ADD_WORK_MEDIUM: number = 7;
-        static MAX_DELAY_ADD_WORK_MEDIUM: number = 13;
+        static MIN_DELAY_ADD_WORK_MEDIUM: number = 6;
+        static MAX_DELAY_ADD_WORK_MEDIUM: number = 9;
 
-        static MIN_DELAY_ADD_WORK_HARD: number = 6;
-        static MAX_DELAY_ADD_WORK_HARD: number = 15;
+        static MIN_DELAY_ADD_WORK_HARD: number = 3;
+        static MAX_DELAY_ADD_WORK_HARD: number = 6;
 
         static DIFFICULTY_EASY: number = 1;
         static DIFFICULTY_MEDIUM: number = 2;
@@ -47,6 +47,9 @@ module Ala3.State {
         create() {
             this.initStatics();
 
+            this.currentScore = 0;
+            this.maxAvailScore = 0;
+
             this.add.sprite(0, 0, 'bg');
 
             this.shredder = new Entity.Shredder(this.game, 332, 146);
@@ -69,6 +72,7 @@ module Ala3.State {
             stamp.events.onInputDown.add(this.onToolClick, this);
 
             this.clock = this.add.sprite(397, 29, 'clock-0');
+            this.minCounter = 0;
 
             this.computer = new Entity.Computer(this.game, 548, -7, this.difficulty);
             this.add.existing(this.computer);
@@ -290,6 +294,7 @@ module Ala3.State {
 
         tickClock() {
             this.minCounter++;
+            this.minCounter = Math.min(this.minCounter, 6);
             this.clock.loadTexture('clock-' + this.minCounter);
 
             if (this.minCounter === 5) {
