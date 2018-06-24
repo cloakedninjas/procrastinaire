@@ -1,21 +1,16 @@
 {
-  "name": "alakajam-3",
+  "name": "procrastinaire",
   "version": "1.0.0",
-  "description": "Boilerplate for Phaser using Typescript",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cloakedninjas/phaser-typescript-boilerplate.git"
+    "url": "git+https://github.com/cloakedninjas/procrastinaire.git"
   },
   "author": "cloakedninjas",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cloakedninjas/phaser-typescript-boilerplate/issues"
-  },
-  "homepage": "https://github.com/cloakedninjas/phaser-typescript-boilerplate#readme",
   "dependencies": {
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "^1.0.0",
