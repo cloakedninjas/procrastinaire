@@ -92,8 +92,7 @@ module Ala3.Entity {
 
                     if (j === 0) {
                         this.addChild(card);
-                        card.x = this.tableauPos.x + (i * this.tableauPos.stackSpacing);
-                        card.y = this.tableauPos.y + (j * this.tableauPos.vSpacing);
+                        this.setCardPosInTableau(card, i, j);
                     } else {
                         let parentCard = stack[stack.length - 2];
                         card.x = 0;
@@ -156,19 +155,17 @@ module Ala3.Entity {
                 }
 
                 let stack = this.holdingStacks[i];
-
-                // is it allowed to be dropped here?
-
                 if (stack.length === 0 && card.value === Card.VALUE_KING) {
                     this.moveCardToStack(card, i);
                     return;
                 }
 
-                let prevCard = stack[stack.length - 1];
-
-                if (prevCard.value === card.value + 1 && card.colour !== prevCard.colour) {
-                    this.moveCardToStack(card, i);
-                    return;
+                let newCardUnderneath = stack[stack.length - 1];
+                if (newCardUnderneath) {
+                    if (newCardUnderneath.value === card.value + 1 && card.colour !== newCardUnderneath.colour) {
+                        this.moveCardToStack(card, i);
+                        return;
+                    }
                 }
             } else if (this.isOverFoundation) {
                 // can we drop here?
@@ -187,11 +184,9 @@ module Ala3.Entity {
         moveCardToStack(card: Card, stackIndex: number) {
             let stack = this.holdingStacks[stackIndex];
             let previousStack = this.holdingStacks[card.stackIndex];
-            let newParent = stack[stack.length - 1];
+            let lastCardIndex = stack.length - 1;
+            let newParent = stack[lastCardIndex];
             let childCards = this.getChildCards(card);
-
-            /*let x = this.tableauPos.x + (stackIndex * this.tableauPos.stackSpacing);
-            let y = this.tableauPos.y + (stack.length * this.tableauPos.vSpacing);*/
 
             for (let i = 0; i < childCards.length; i++) {
                 previousStack.pop();
@@ -203,6 +198,10 @@ module Ala3.Entity {
                 newParent.addChild(card);
                 card.x = 0;
                 card.y = this.tableauPos.vSpacing;
+            } else {
+                // detach card and give it back to us
+                this.addChild(card);
+                this.setCardPosInTableau(card, stackIndex, lastCardIndex);
             }
 
             card.stackIndex = stackIndex;
@@ -220,7 +219,7 @@ module Ala3.Entity {
 
         bringStackToTop(card: Card) {
             let parent = card.parent;
-            let topChild:any = card;
+            let topChild: any = card;
 
             while (parent !== this) {
                 topChild = parent;
@@ -234,7 +233,7 @@ module Ala3.Entity {
 
         getChildCards(card: Card) {
             let cards = [];
-            let firstChild:any = card;
+            let firstChild: any = card;
 
             cards.push(firstChild);
 
@@ -256,6 +255,11 @@ module Ala3.Entity {
             card.events.onDragStop.add(this.onHoldingCardDragEnd, this);
 
             this.visibleDeck.push(card);
+        }
+
+        private setCardPosInTableau(card: Card, stackIndex: number, lastCardIndex: number) {
+            card.x = this.tableauPos.x + (stackIndex * this.tableauPos.stackSpacing);
+            card.y = this.tableauPos.y + (lastCardIndex * this.tableauPos.vSpacing);
         }
     }
 }
