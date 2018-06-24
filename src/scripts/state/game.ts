@@ -41,7 +41,7 @@ module Ala3.State {
             let bg = this.add.sprite(0, 0, 'bg');
             bg.alpha = 0.6;
 
-            this.shredder = new Entity.Shredder(this.game, 335, 153);
+            this.shredder = new Entity.Shredder(this.game, 332, 146);
             this.add.existing(this.shredder);
 
             let stapler = new Entity.Stapler(this.game, 425, 344);
@@ -79,7 +79,8 @@ module Ala3.State {
                 paperIn: this.game.add.audio( 'paper-in'),
                 paperOut: this.game.add.audio( 'paper-out'),
                 pickUp: this.game.add.audio( 'pick-up'),
-                putDown: this.game.add.audio( 'put-down')
+                putDown: this.game.add.audio( 'put-down'),
+                ambient: this.game.add.audio( 'ambient', 1, true)
             };
 
             this.inboxItems = [];
@@ -93,6 +94,8 @@ module Ala3.State {
             this.clockTimer.repeat(Phaser.Timer.MINUTE, 5, this.tickClock, this);
             this.clockTimer.start();
             this.startTime = this.game.time.now;
+
+            this.sounds.ambient.play();
         }
 
         update() {
@@ -145,7 +148,7 @@ module Ala3.State {
             this.trayOuterInbox.bringToTop();
 
             if (this.inboxItems.length === 5) {
-                this.computer.showPopup('You know you have some work piling up right?');
+                //this.computer.showPopup('You know you have some work piling up right?');
             }
 
             this.sounds.paperIn.play();
@@ -245,6 +248,7 @@ module Ala3.State {
                 this.checkWorkQuality();
             } else if (this.outbox.getBounds().contains(pointer.x, pointer.y)) {
                 this.checkWorkQuality();
+                this.sounds.paperOut.play();
             } else {
                 this.itemInProgress.returnToDragStartPos();
             }
