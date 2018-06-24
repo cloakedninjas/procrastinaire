@@ -1,14 +1,9 @@
 module Ala3.Entity {
     export class Paper extends Phaser.Sprite {
-        static TASK_CLIP: number = 1;
-        static TASK_PEN: number = 2;
-        static TASK_SHRED: number = 3;
-        static TASK_STAMP: number = 4;
-        static TASK_STAPLER: number = 5;
-
         static TOTAL_TASKS: number = 5;
         static MIN_TASKS_PER_WORK: number = 1;
         static MAX_TASKS_PER_WORK: number = 6;
+        static MAX_SAME_TASK: number = 3;
 
         game: Game;
         startDragPos: {
@@ -29,27 +24,27 @@ module Ala3.Entity {
 
             this.tasks = {};
 
-            this.tasks[Paper.TASK_CLIP] = {
+            this.tasks[Tool.TASK_CLIP] = {
                 requested: 0,
                 done: 0
             };
 
-            this.tasks[Paper.TASK_PEN] = {
+            this.tasks[Tool.TASK_PEN] = {
                 requested: 0,
                 done: 0
             };
 
-            this.tasks[Paper.TASK_SHRED] = {
+            this.tasks[Tool.TASK_SHRED] = {
                 requested: 0,
                 done: 0
             };
 
-            this.tasks[Paper.TASK_STAMP] = {
+            this.tasks[Tool.TASK_STAMP] = {
                 requested: 0,
                 done: 0
             };
 
-            this.tasks[Paper.TASK_STAPLER] = {
+            this.tasks[Tool.TASK_STAPLER] = {
                 requested: 0,
                 done: 0
             };
@@ -61,9 +56,18 @@ module Ala3.Entity {
                 this.tasks[taskId].requested++;
             }
 
-            // can't shred multiple times :D
-            if (this.tasks[Paper.TASK_SHRED].requested > 1) {
-                this.tasks[Paper.TASK_SHRED].requested = 1;
+            for (let taskId in this.tasks) {
+                let task = this.tasks[taskId];
+
+                if (parseInt(taskId) === Tool.TASK_SHRED && task.requested > 1) {
+                    // can't shred multiple times :D
+                    task.requested = 1;
+                    continue;
+                }
+
+                if (task.requested > Paper.MAX_SAME_TASK) {
+                    task.requested = Paper.MAX_SAME_TASK;
+                }
             }
 
             // add post-it
@@ -74,11 +78,11 @@ module Ala3.Entity {
             // add icons
             let i = 0;
             let icons = {};
-            icons[Paper.TASK_CLIP] = 'icon-paperclip';
-            icons[Paper.TASK_PEN] = 'icon-pen';
-            icons[Paper.TASK_SHRED] = 'icon-shredder';
-            icons[Paper.TASK_STAMP] = 'icon-stamp';
-            icons[Paper.TASK_STAPLER] = 'icon-staple';
+            icons[Tool.TASK_CLIP] = 'icon-paperclip';
+            icons[Tool.TASK_PEN] = 'icon-pen';
+            icons[Tool.TASK_SHRED] = 'icon-shredder';
+            icons[Tool.TASK_STAMP] = 'icon-stamp';
+            icons[Tool.TASK_STAPLER] = 'icon-staple';
 
             for (let taskId in this.tasks) {
                 let task = this.tasks[taskId];
@@ -148,7 +152,7 @@ module Ala3.Entity {
         calcScore() {
             let correct = 0;
 
-            if (!this.tasks[Paper.TASK_SHRED].requested && this.tasks[Paper.TASK_SHRED].done) {
+            if (!this.tasks[Tool.TASK_SHRED].requested && this.tasks[Tool.TASK_SHRED].done) {
                 return -3;
             }
 

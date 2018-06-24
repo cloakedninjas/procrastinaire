@@ -125,17 +125,17 @@ module Ala3.State {
                 // picked up tool
 
                 let icons = {};
-                icons[Entity.Paper.TASK_CLIP] = 'paperclip-active';
-                icons[Entity.Paper.TASK_PEN] = 'pen-active';
-                icons[Entity.Paper.TASK_STAMP] = 'stamp-active';
-                icons[Entity.Paper.TASK_STAPLER] = 'stapler-active';
+                icons[Entity.Tool.TASK_CLIP] = 'paperclip-active';
+                icons[Entity.Tool.TASK_PEN] = 'pen-active';
+                icons[Entity.Tool.TASK_STAMP] = 'stamp-active';
+                icons[Entity.Tool.TASK_STAPLER] = 'stapler-active';
 
                 tool.alpha = 0.5;
                 this.currentTool = tool;
                 this.cursorTool.loadTexture(icons[tool.id]);
                 this.cursorTool.visible = true;
 
-                if (tool.id === Entity.Paper.TASK_PEN) {
+                if (tool.id === Entity.Tool.TASK_PEN) {
                     this.cursorTool.anchor.y = 1;
                 } else {
                     this.cursorTool.anchor.y = 0;
@@ -152,7 +152,7 @@ module Ala3.State {
 
         onPaperDragEnd(paper: Entity.Paper, pointer: Phaser.Pointer) {
             if (this.shredder.getBounds().contains(pointer.x, pointer.y)) {
-                this.itemInProgress.applyTool(Entity.Paper.TASK_SHRED);
+                this.itemInProgress.applyTool(Entity.Tool.TASK_SHRED);
                 this.checkWorkQuality();
             } else if (this.outbox.getBounds().contains(pointer.x, pointer.y)) {
                 this.checkWorkQuality();

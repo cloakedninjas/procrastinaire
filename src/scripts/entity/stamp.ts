@@ -3,7 +3,7 @@ module Ala3.Entity {
         constructor(game, x, y) {
             super(game, x, y, 'stamp-desk');
 
-            this.id = Paper.TASK_STAMP;
+            this.id = Tool.TASK_STAMP;
         }
     }
 }

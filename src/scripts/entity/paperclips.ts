@@ -4,7 +4,7 @@ module Ala3.Entity {
         constructor(game, x, y) {
             super(game, x, y, 'paperclips-desk');
 
-            this.id = Paper.TASK_CLIP;
+            this.id = Tool.TASK_CLIP;
         }
     }
 }
