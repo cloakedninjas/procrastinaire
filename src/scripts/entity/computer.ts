@@ -12,6 +12,8 @@ module Ala3.Entity {
         foundationPos: any;
         isOverTableau: boolean = false;
         isOverFoundation: boolean = false;
+        moves: number = 0;
+        moveLabel: Phaser.Text;
 
         constructor(game, x, y) {
             super(game, x, y, 'computer');
@@ -137,6 +139,12 @@ module Ala3.Entity {
                 }
             }, this);
 
+            this.moveLabel = new Phaser.Text(game, 395, 390, 'Moves: 0', {
+                font: '14px Arial',
+                fill: '#333'
+            });
+
+            this.addChild(this.moveLabel);
 
             window['solitaire'] = this;
         }
@@ -255,6 +263,7 @@ module Ala3.Entity {
             }
 
             card.stackIndex = stackIndex;
+            this.incrementMoveCounter();
         }
 
         moveCardToFoundation(card: Card, stackIndex: number) {
@@ -290,6 +299,7 @@ module Ala3.Entity {
             }
 
             stack.push(card);
+            this.incrementMoveCounter();
         }
 
         bringStackToTop(card: Card) {
@@ -346,6 +356,13 @@ module Ala3.Entity {
                     card.hide();
                 }, this);
             }
+
+            this.incrementMoveCounter();
+        }
+
+        incrementMoveCounter() {
+            this.moves++;
+            this.moveLabel.text = 'Moves: ' + this.moves;
         }
 
         private setCardPosInTableau(card: Card, stackIndex: number, lastCardIndex: number) {
