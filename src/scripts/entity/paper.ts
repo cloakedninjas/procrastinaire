@@ -168,7 +168,10 @@ module Ala3.Entity {
             let correct = 0;
 
             if (!this.tasks[Tool.TASK_SHRED].requested && this.tasks[Tool.TASK_SHRED].done) {
-                return -3;
+                return {
+                    available: availPoints,
+                    correct: 0
+                };
             }
 
             for (let taskId in this.tasks) {

@@ -21,6 +21,8 @@ module Ala3.Entity {
         popupShowing: boolean = false;
         difficulty: number;
 
+        gameComplete:Phaser.Signal;
+
         constructor(game, x: number, y: number, difficulty: number) {
             super(game, x, y, 'computer');
 
@@ -155,6 +157,8 @@ module Ala3.Entity {
             });
 
             this.addChild(this.pointsLabel);
+
+            this.gameComplete = new Phaser.Signal();
 
             window['solitaire'] = this;
         }
@@ -328,7 +332,7 @@ module Ala3.Entity {
             }
 
             if (done) {
-                console.log('woop');
+                this.gameComplete.dispatch();
             }
         }
 

@@ -9,7 +9,7 @@ module Ala3.State {
         static MAX_DELAY_ADD_WORK_MEDIUM: number = 13;
 
         static MIN_DELAY_ADD_WORK_HARD: number = 6;
-        static MAX_DELAY_ADD_WORK_HARD: number = 10;
+        static MAX_DELAY_ADD_WORK_HARD: number = 15;
 
         static DIFFICULTY_EASY: number = 1;
         static DIFFICULTY_MEDIUM: number = 2;
@@ -71,6 +71,7 @@ module Ala3.State {
 
             this.computer = new Entity.Computer(this.game, 548, -7, this.difficulty);
             this.add.existing(this.computer);
+            this.computer.gameComplete.addOnce(this.gameOver.bind(this, Game.WIN_CONDITION));
 
             let shine = new Phaser.Sprite(this.game, 921, 74, 'computer-shine');
             this.add.existing(shine);
@@ -219,9 +220,6 @@ module Ala3.State {
             this.maxAvailScore += score.available;
             this.currentScore += score.correct;
 
-            console.log('score', score);
-            console.log('running score', this.currentScore, this.maxAvailScore);
-
             this.itemInProgress.destroy();
             this.itemInProgress = null;
         }
@@ -299,7 +297,8 @@ module Ala3.State {
                 actionsDone: this.maxAvailScore,
                 actionsCorrect: this.currentScore,
                 cards: this.computer.points,
-                difficulty: this.difficulty
+                difficulty: this.difficulty,
+                gameWon: reason === Game.WIN_CONDITION
             });
         }
     }

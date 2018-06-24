@@ -33,6 +33,7 @@ module Ala3.State {
             let mult = 10;
             let total = this.score.actionsCorrect * mult;
             let bonus;
+            let winBonus;
 
             total += this.score.cards * mult;
 
@@ -50,6 +51,10 @@ module Ala3.State {
                 total = Math.round(total);
             }
 
+            if (this.score.gameWon) {
+                winBonus = total;
+                total += winBonus;
+            }
 
             let s:string;
 
@@ -68,6 +73,12 @@ module Ala3.State {
             // solitaire
             s = (this.score.cards * mult).toString();
             this.add.text(795, 446, s, fontStyle);
+
+            if (this.score.gameWon) {
+                this.add.text(109, 473, 'A WINNER IS YOU BONUS', fontStyle);
+                this.add.text(471, 473, '1', fontStyle);
+                this.add.text(794, 473, winBonus.toString(), fontStyle);
+            }
 
             // bonuses
             if (this.score.difficulty === Game.DIFFICULTY_EASY) {
@@ -97,20 +108,6 @@ module Ala3.State {
             fontStyle.font = 'bold 22px Arial';
             this.add.text(433, 232, dateString.toUpperCase(), fontStyle);
 
-
-            /*console.log('points', this.points);
-
-            let mult = Math.round(this.accuracy * 100);
-
-            console.log('accuracy multiplier', mult);
-
-            let score = Math.round(this.points * this.accuracy);
-
-            console.log('score', score);
-
-            if (this.gameWon) {
-                console.log('game won bonus (2x)', score * 2);
-            }*/
         }
 
         restart() {
