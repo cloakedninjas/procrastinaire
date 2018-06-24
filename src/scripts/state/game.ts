@@ -30,7 +30,7 @@ module Ala3.State {
             this.add.existing(paperclips);
             paperclips.events.onInputDown.add(this.onToolClick, this);
 
-            let stamp = new Entity.Stamp(this.game, 178, 514);
+            let stamp = new Entity.Stamp(this.game, 177, 434);
             this.add.existing(stamp);
             stamp.events.onInputDown.add(this.onToolClick, this);
 
