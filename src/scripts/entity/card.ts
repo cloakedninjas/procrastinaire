@@ -83,5 +83,10 @@ module Ala3.Entity {
                 y: y
             }, 1000, Phaser.Easing.Elastic.Out, true);
         }
+
+        removeInputControl() {
+            this.inputEnabled = false;
+            this.input.disableDrag();
+        }
     }
 }

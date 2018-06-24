@@ -59,9 +59,9 @@ module Ala3.Entity {
             this.tableauPos.bounds.y2 = this.y + this.tableauPos.y + this.tableauPos.height;
 
             this.foundationPos = {
-                x: 200,
-                y: 80,
-                stackSpacing: cardSize.w + 10,
+                x: 237,
+                y: 85,
+                stackSpacing: cardSize.w + 6,
                 width: 0,
                 height: 0,
                 bounds: {
@@ -123,7 +123,13 @@ module Ala3.Entity {
         }
 
         onHoldingCardDragStart(card: Card, pointer: Phaser.Pointer) {
-            this.bringStackToTop(card);
+            if (card.stackIndex === null) {
+                let i = this.children.indexOf(card);
+                this.children.splice(i, 1);
+                this.children.push(card);
+            } else {
+                this.bringStackToTop(card);
+            }
         }
 
         onHoldingCardDragMove(card: Card, pointer: Phaser.Pointer) {
@@ -188,7 +194,7 @@ module Ala3.Entity {
                 let newCardUnderneath = stack[stack.length - 1];
                 if (newCardUnderneath) {
                     if (newCardUnderneath.value === card.value - 1 && card.suit === newCardUnderneath.suit) {
-                        this.moveCardToTableau(card, i);
+                        this.moveCardToFoundation(card, i);
                         return;
                     }
                 }
@@ -205,8 +211,9 @@ module Ala3.Entity {
             let childCards = this.getChildCards(card);
 
             if (card.stackIndex === null) {
-                this.takeCardFromDeck(card);
+                this.removeCardFromDeck(card);
                 stack.push(card);
+                this.cycleDeck();
             } else {
                 let previousStack = this.holdingStacks[card.stackIndex];
 
@@ -250,12 +257,21 @@ module Ala3.Entity {
                 // maybe detach parent, and replace then kill parent?
             }
 
+            card.removeInputControl();
+
             if (card.stackIndex === null) {
-                this.takeCardFromDeck(card);
+                // card came from deck
+                this.removeCardFromDeck(card);
+                this.cycleDeck();
             } else {
                 // card came from tableau
                 let previousStack = this.holdingStacks[card.stackIndex];
                 previousStack.pop();
+
+                // reveal next card
+                if (previousStack.length) {
+                    previousStack[previousStack.length - 1].reveal();
+                }
             }
 
             stack.push(card);
@@ -295,6 +311,7 @@ module Ala3.Entity {
             card.reveal();
             card.x = 120;
 
+            card.events.onDragStart.add(this.onHoldingCardDragStart, this);
             card.events.onDragUpdate.add(this.onHoldingCardDragMove, this);
             card.events.onDragStop.add(this.onHoldingCardDragEnd, this);
 
@@ -312,7 +329,7 @@ module Ala3.Entity {
             card.y = this.foundationPos.y;
         }
 
-        private takeCardFromDeck(card: Card) {
+        private removeCardFromDeck(card: Card) {
             let i = this.deck.indexOf(card);
             this.deck.splice(i, 1);
         }
