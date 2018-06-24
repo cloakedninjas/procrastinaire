@@ -86,10 +86,6 @@ module Ala3.Entity {
                 this.deck.push(card);
             }
 
-            /*let assist = [];
-            assist.push(this.deck.splice(0, 1));
-            debugger;*/
-
             this.deck = Helpers.shuffle(this.deck);
 
             for (let i = 0; i < this.holdingStacks.length; i++) {
@@ -111,11 +107,11 @@ module Ala3.Entity {
                     }
 
                     card.stackIndex = i;
-                }
 
-                card.events.onDragStart.add(this.onHoldingCardDragStart, this);
-                card.events.onDragUpdate.add(this.onHoldingCardDragMove, this);
-                card.events.onDragStop.add(this.onHoldingCardDragEnd, this);
+                    card.events.onDragStart.add(this.onHoldingCardDragStart, this);
+                    card.events.onDragUpdate.add(this.onHoldingCardDragMove, this);
+                    card.events.onDragStop.add(this.onHoldingCardDragEnd, this);
+                }
 
                 card.reveal();
             }
