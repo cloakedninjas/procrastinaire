@@ -1,10 +1,16 @@
 module Ala3.State {
     export class Game extends Phaser.State {
-        static MAX_INBOX_ITEMS: number = 9;
+        static MAX_INBOX_ITEMS: number = 15;
+        static MIN_DELAY_ADD_WORK: number = 5;
+        static MAX_DELAY_ADD_WORK: number = 10;
 
         static DIFFICULTY_EASY: number = 1;
         static DIFFICULTY_MEDIUM: number = 2;
         static DIFFICULTY_HARD: number = 3;
+
+        static LOSE_CONDITION_WORK: number = 1;
+        static LOSE_CONDITION_TIME: number = 2;
+        static WIN_CONDITION: number = 3;
 
         cursorTool: Phaser.Sprite;
         inboxItems: Phaser.Sprite[];
@@ -17,6 +23,7 @@ module Ala3.State {
         difficulty: number;
         maxAvailScore: number = 0;
         currentScore: number = 0;
+        timeRemaining: number;
 
         init(difficulty: number) {
             this.difficulty = difficulty;
@@ -109,7 +116,7 @@ module Ala3.State {
 
         addPaperToInbox() {
             let x = -279;
-            let y = 534 - (this.inboxItems.length * 20);
+            let y = 534 - (this.inboxItems.length * 30);
             let paper = new Phaser.Sprite(this.game, x, y, 'paper-inbox');
             paper.inputEnabled = true;
             paper.events.onInputDown.add(this.takeItemFromInbox, this);
@@ -121,13 +128,17 @@ module Ala3.State {
         }
 
         shouldAddWork() {
-            // add logic if work should get added
             if (this.inboxItems.length < Game.MAX_INBOX_ITEMS) {
                 this.addPaperToInbox();
             }
 
+            if (this.inboxItems.length === Game.MAX_INBOX_ITEMS) {
+                //this.gameOver(Game.LOSE_CONDITION_WORK);
+            }
+
             // queue another
-            this.game.time.events.add(5000, this.shouldAddWork, this);
+            let rand = Phaser.Math.random(Game.MIN_DELAY_ADD_WORK, Game.MAX_DELAY_ADD_WORK + 1);
+            this.game.time.events.add(rand * 1000, this.shouldAddWork, this);
         }
 
         takeItemFromInbox() {
@@ -213,6 +224,17 @@ module Ala3.State {
             if (this.cursorTool.visible) {
                 this.itemInProgress.applyTool(this.currentTool.id);
             }
+        }
+
+        gameOver(reason: number) {
+            let success = false;
+
+            if (reason === Game.LOSE_CONDITION_WORK || reason === Game.LOSE_CONDITION_TIME) {
+            } else {
+            }
+
+            this.game.state.start('scores', true, null,
+                reason, this.timeRemaining, this.currentScore / this.maxAvailScore);
         }
     }
 }

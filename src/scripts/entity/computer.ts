@@ -107,11 +107,11 @@ module Ala3.Entity {
                     }
 
                     card.stackIndex = i;
-
-                    card.events.onDragStart.add(this.onHoldingCardDragStart, this);
-                    card.events.onDragUpdate.add(this.onHoldingCardDragMove, this);
-                    card.events.onDragStop.add(this.onHoldingCardDragEnd, this);
                 }
+
+                card.events.onDragStart.add(this.onHoldingCardDragStart, this);
+                card.events.onDragUpdate.add(this.onHoldingCardDragMove, this);
+                card.events.onDragStop.add(this.onHoldingCardDragEnd, this);
 
                 card.reveal();
             }
@@ -128,6 +128,10 @@ module Ala3.Entity {
                 card.y = this.deckPos.y;
                 card.stackIndex = Computer.STACK_DECK;
                 this.addChild(card);
+
+                card.events.onDragStart.add(this.onHoldingCardDragStart, this);
+                card.events.onDragUpdate.add(this.onHoldingCardDragMove, this);
+                card.events.onDragStop.add(this.onHoldingCardDragEnd, this);
             }
 
             let deckBounds = new Phaser.Rectangle(
@@ -304,6 +308,20 @@ module Ala3.Entity {
 
             stack.push(card);
             this.incrementMoveCounter();
+
+            // check win condition
+            let done = true;
+
+            for (let s in this.completeStacks) {
+                if (this.completeStacks[s].length !== 13) {
+                    done = false;
+                    break;
+                }
+            }
+
+            if (done) {
+                console.log('woop');
+            }
         }
 
         bringStackToTop(card: Card) {
@@ -346,20 +364,18 @@ module Ala3.Entity {
                 card.x = this.deckPos.visibleX;
                 card.stackIndex = Computer.STACK_WASTE;
                 this.bringCardToTop(card);
-
-                card.events.onDragStart.add(this.onHoldingCardDragStart, this);
-                card.events.onDragUpdate.add(this.onHoldingCardDragMove, this);
-                card.events.onDragStop.add(this.onHoldingCardDragEnd, this);
+                card.enableDrag();
 
                 this.wastePile.push(card);
             } else {
                 this.deck = this.wastePile;
                 this.wastePile = [];
 
-                this.deck.forEach(function(card: Card) {
+                this.deck.forEach(function (card: Card) {
                     card.x = this.deckPos.x;
                     card.stackIndex = Computer.STACK_DECK;
                     card.hide();
+                    card.disableDrag();
                 }, this);
             }
 

@@ -13,6 +13,7 @@ module Ala3 {
             this.state.add('preloader', State.Preloader, true);
             this.state.add('title', State.Title);
             this.state.add('game', State.Game);
+            this.state.add('scores', State.Score);
         }
 
         boot() {

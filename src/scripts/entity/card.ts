@@ -74,7 +74,7 @@ module Ala3.Entity {
 
             this.revealed = true;
             this.inputEnabled = true;
-            this.input.enableDrag(false, false);
+            this.enableDrag();
             this.events.onDragStart.add(function () {
                 this.startDragPos = {x: this.x, y: this.y};
             }, this);
@@ -82,6 +82,14 @@ module Ala3.Entity {
 
         hide() {
             this.loadTexture('card-back');
+        }
+
+        enableDrag() {
+            this.input.enableDrag(false, false);
+        }
+
+        disableDrag() {
+            this.input.disableDrag();
         }
 
         returnToDragStartPos() {
