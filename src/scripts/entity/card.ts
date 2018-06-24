@@ -18,12 +18,14 @@ module Ala3.Entity {
         revealed: boolean = false;
         stackIndex: number;
         startDragPos: Phaser.Point;
+        difficulty: number;
 
-        constructor(game, id: number) {
-            super(game, 0, 0, 'card-back');
+        constructor(game, id: number, difficulty: number) {
+            super(game, 0, 0, 'card-back-' + difficulty);
 
             this.suit = Math.floor(id / 13);
             this.value = id % 13;
+            this.difficulty = difficulty;
 
             this.colour = this.suit <= 1 ? 'red' : 'black';
         }
@@ -81,7 +83,7 @@ module Ala3.Entity {
         }
 
         hide() {
-            this.loadTexture('card-back');
+            this.loadTexture('card-back-' + this.difficulty);
         }
 
         enableDrag() {

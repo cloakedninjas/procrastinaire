@@ -6,13 +6,18 @@ module Ala3.State {
             this.loadingBar = new Entity.PreloadBar(this.game);
 
             this.load.image('title-screen', 'assets/images/title-screen.png');
+            this.load.image('end-screen', 'assets/images/end-screen.png');
             this.load.image('bg', 'assets/images/background.png');
 
             this.load.image('computer', 'assets/images/computer-screen.png');
             this.load.image('popup', 'assets/images/pop-up.png');
             this.load.image('computer-shine', 'assets/images/computer-shine.png');
-            this.load.image('card-back', 'assets/images/card-back-tropical.png');
+
             this.load.image('card-front', 'assets/images/card-front.png');
+
+            this.load.image('card-back-1', 'assets/images/card-back-tropical.png');
+            this.load.image('card-back-2', 'assets/images/card-back-normal.png');
+            this.load.image('card-back-3', 'assets/images/card-back-halloween.png');
 
             this.load.image('stapler', 'assets/images/stapler.png');
             this.load.image('paperclip-cup', 'assets/images/paperclip-cup.png');
@@ -70,7 +75,7 @@ module Ala3.State {
         }
 
         startGame() {
-            this.game.state.start('title', true, null, Game.DIFFICULTY_EASY);
+            this.game.state.start('title', true, null);
         }
 
         loadUpdate() {

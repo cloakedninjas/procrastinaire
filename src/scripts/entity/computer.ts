@@ -19,10 +19,12 @@ module Ala3.Entity {
         pointsLabel: Phaser.Text;
         points: number = 0;
         popupShowing: boolean = false;
+        difficulty: number;
 
-        constructor(game, x, y) {
+        constructor(game, x: number, y: number, difficulty: number) {
             super(game, x, y, 'computer');
 
+            this.difficulty = difficulty;
             this.completeStacks = [[], [], [], []];
             this.holdingStacks = [[], [], [], [], [], [], []];
             this.deck = [];
@@ -81,7 +83,7 @@ module Ala3.Entity {
             // fill cards
 
             for (let i = 0; i < 52; i++) {
-                let card = new Card(game, i);
+                let card = new Card(game, i, this.difficulty);
 
                 this.deck.push(card);
             }

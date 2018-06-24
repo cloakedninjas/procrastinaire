@@ -15,14 +15,14 @@ module Ala3.State {
             let buttons = {};
 
             buttons[Game.DIFFICULTY_EASY] = new Phaser.Rectangle(
-                619,
+                476,
                 y,
                 cardSize.w,
                 cardSize.h
             );
 
             buttons[Game.DIFFICULTY_MEDIUM] = new Phaser.Rectangle(
-                476,
+                619,
                 y,
                 cardSize.w,
                 cardSize.h

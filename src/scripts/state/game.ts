@@ -62,7 +62,7 @@ module Ala3.State {
 
             this.clock = this.add.sprite(397, 29, 'clock-0');
 
-            this.computer = new Entity.Computer(this.game, 548, -7);
+            this.computer = new Entity.Computer(this.game, 548, -7, this.difficulty);
             this.add.existing(this.computer);
 
             let shine = new Phaser.Sprite(this.game, 921, 74, 'computer-shine');
@@ -73,7 +73,7 @@ module Ala3.State {
             this.add.existing(this.cursorTool);
 
             this.trayOuterInbox = this.add.sprite(57, 424, 'tray-outer-inbox');
-            this.outbox = this.add.sprite(896, 424, 'outbox');
+            this.outbox = this.add.sprite(929, 435, 'outbox');
 
             this.sounds = {
                 paperIn: this.game.add.audio( 'paper-in'),
@@ -270,24 +270,12 @@ module Ala3.State {
         }
 
         gameOver(reason: number) {
-            let timeRemaining;
-            let accuracy = 0;
-
-            /*if (reason === Game.LOSE_CONDITION_TIME) {
-                timeRemaining = 0;
-            } else {
-                timeRemaining = this.game.time.now - this.startTime;
-            }*/
-
-            let points = this.computer.points;
-            let gameWon = reason === Game.WIN_CONDITION;
-
-            if (this.maxAvailScore) {
-                accuracy = this.currentScore / this.maxAvailScore;
-            }
-
-            this.game.state.start('scores', true, null,
-                points, accuracy, gameWon);
+            this.game.state.start('scores', true, null, {
+                actionsDone: this.maxAvailScore,
+                actionsCorrect: this.currentScore,
+                cards: this.computer.points,
+                difficulty: this.difficulty
+            });
         }
     }
 }

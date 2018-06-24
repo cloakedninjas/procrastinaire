@@ -26,7 +26,9 @@ module Ala3 {
 
         playMusic() {
             this.music = new Phaser.Sound(this, 'track-1', 0.5, true);
-            this.music.play();
+            if (!this.music.isPlaying) {
+                this.music.play();
+            }
         }
     }
 }
