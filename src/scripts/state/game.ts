@@ -225,9 +225,14 @@ module Ala3.State {
         }
 
         onToolClick(tool: Entity.Tool) {
+            if (this.currentTool && tool != this.currentTool) {
+                return;
+            }
+
             if (this.cursorTool.visible) {
                 tool.alpha = 1;
                 this.cursorTool.visible = false;
+                this.currentTool = null;
 
                 if (this.itemInProgress) {
                     this.itemInProgress.input.enableDrag();
