@@ -274,7 +274,11 @@ module Ala3.Entity {
 
             card.stackIndex = stackIndex;
             this.incrementMoveCounter();
-            this.incrementPoints(false);
+
+            if (!card.pointsGot) {
+                this.incrementPoints(false);
+                card.pointsGot = true;
+            }
         }
 
         moveCardToFoundation(card: Card, stackIndex: number) {

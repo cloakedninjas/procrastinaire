@@ -19,6 +19,7 @@ module Ala3.Entity {
         stackIndex: number;
         startDragPos: Phaser.Point;
         difficulty: number;
+        pointsGot: boolean = false;
 
         constructor(game, id: number, difficulty: number) {
             super(game, 0, 0, 'card-back-' + difficulty);
